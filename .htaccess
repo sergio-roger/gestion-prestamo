@@ -1,0 +1,17 @@
+Options All -Indexes
+
+RewriteEngine On
+RewriteRule ^([a-zA-Z0-9/]+)$ index.php?view=$1
+
+<IfModule mod_rewrite.c>
+# Activar rewrite
+RewriteEngine on
+ErrorDocument 404 http://localhost:8080/Webs/CrediExpess-Des/404
+
+RewriteCond %{SCRIPT_FILENAME} !-d
+RewriteCond %{SCRIPT_FILENAME} !-f
+
+#RewriteRule ^(.*)/(.*) home.php?controller=$1&action=$2
+RewriteRule ^([a-zA-Z0-9/]+)$ index.php?view=$1
+
+</IfModule>
