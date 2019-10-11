@@ -2,7 +2,7 @@
   <!-- Site wrapper -->
   <div class="wrapper">
     <!-- Navbar -->
-    <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+    <nav class="main-header navbar navbar-expand navbar-white navbar-light fixed-top">
         <!-- Left navbar links -->
         <ul class="navbar-nav">
           <li class="nav-item">
@@ -12,7 +12,7 @@
             <a href="<?= BASE ?>home" class="nav-link">Home</a>
           </li>
           <li class="nav-item d-none d-sm-inline-block">
-            <a href="#" class="nav-link">Contact</a>
+            <a href="<?= BASE?>prestamoNuevo" class="nav-link">Nuevo Prestamo</a>
           </li>
           <li class="nav-item d-none d-sm-inline-block">
             <a href="#" class="nav-link d-none" id="id-Usuario" value="<?= $_SESSION['usuario']['id']?>">ID</a>
@@ -181,4 +181,4 @@
       <!-- /.navbar -->
 
       <!-- Content Wrapper. Contains page content -->
-      <div class="content-wrapper">
+      <div class="content-wrapper aki-termina-el-navbar">

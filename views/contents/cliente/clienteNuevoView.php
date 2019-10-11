@@ -3,7 +3,7 @@
     <!-- small box -->
     <div class="small-box bg-info">
         <div class="inner">
-        <h3 class="total-clientes"></h3>
+        <h3 class="total-clientes"><i class="fas fa-spinner"></i></h3>
 
         <p>Total Clientes</p>
         </div>
@@ -45,7 +45,7 @@
         </div>
         <!-- /.card-header -->
         <!-- form start -->
-        <form role="form" class="preventDefault" action="" method="POST" id="form-cliente"
+        <form role="form" class="preventDefault" action="" method="POST" id="form-cliente accept-charset="utf-8""
             enctype="multipart/form-data">
             <div class="card-body">
                 <div class="form-group">

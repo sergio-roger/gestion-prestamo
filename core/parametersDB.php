@@ -5,7 +5,7 @@ define('DB','crediexpress');
 define('USER','root');
 define('PASS','');
 
-define('SGBD','mysql:host='.HOST.';dbname='.DB).';charset=utf8';
+define('SGBD','mysql:host='.HOST.';dbname='.DB);
 
 define('METHOD','AES-256-CBC');
 define('SECRET_KEY','$CE@2019');

@@ -1,6 +1,5 @@
     <!-- Content Header (Page header) -->
-
-    <div class="content-header">
+    <div class="content-header mt-5">
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
@@ -24,6 +23,8 @@
       </div><!-- /.container-fluid -->
     </div>
     <!-- /.content-header -->
+
+    <!-- Aki va la barra de control  -->
 
     <!-- Main content -->
 <section class="container">

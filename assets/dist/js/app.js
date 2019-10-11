@@ -2,6 +2,7 @@
 var monto = 0, interes = 0, plazo = 0; 
 var total = 0, n_cuotas;
 var span = ' <span>$</span>';
+var BASE = 'http://localhost:8080/Webs/CrediExpress-Des/';
 
 $(document).ready(function(){
   var hoy = obtenerFecha();
@@ -25,11 +26,15 @@ $(document).ready(function(){
     let peticiones = {
       result: true,
       funciones: {
-        _1datosUsuario: '0.- Cargar datos del Usuario',
-        _2cargarClientes: '1.- Peticiones de cargar clientes',
-        _3countClientes: '2.- Contar clientes',
-        _4getMontos: '3.- Carga los montos',
-        _5getIntereses: '4.- Carga los intereses'
+        _1datosUsuario: '1.- Cargar datos del Usuario',
+        _2cargarClientes: '2.- Peticiones de cargar clientes',
+        _3countClientes: '3.- Contar clientes',
+        _4getMontos: '4.- Carga los montos',
+        _5getIntereses: '5.- Carga los intereses',
+        _6getPlazos: '6.- Carga de plazos',
+        _7getEstatus: '7.- Carga de estatus',
+        // _8listarPrestamos: '8.- listar prestamos',
+        _9countPrestamos: '9.- Contar préstamos' 
       }
     };
     datosUsuario();
@@ -38,6 +43,10 @@ $(document).ready(function(){
     countClientes();
     getMontos();
     getIntereses();
+    getPlazos();
+    getEstatus();
+    // listaPrestamos();
+    countPrestamo();
 
     console.log(peticiones);
   }
@@ -216,6 +225,79 @@ $(document).ready(function(){
     });
   }
   
+  function getPlazos(){
+    let ruta = 'ajax/LlenarCombosAjax.php';
+
+    let dataJson = {
+      type:'all',
+      method:'get',
+      entidad:'plazos',
+      modo: 'dias'
+    }
+
+    let  plazos = new Ajax(ruta,'GET', dataJson);
+    
+    plazos.__ajax()
+    .done(function(response) {
+      
+      response = JSON.parse(response);
+      // console.log(response);
+      var option = '<option value="0">Seleccione una opcion</option> ';
+
+      if(response.result){
+        for (var i in response.plazos)
+          option += `<option value="${response.plazos[i].id}">${response.plazos[i].pla_duracion}</option>`;
+      }
+      $('.comboPlazos').html(option);
+    });
+
+  }
+
+  function getEstatus(){
+    let ruta = 'ajax/LlenarCombosAjax.php';
+
+    let dataJson = {
+      type:'all',
+      method:'get',
+      entidad:'estatus',
+    }
+
+    let  estatus = new Ajax(ruta,'GET', dataJson);
+    
+    estatus.__ajax()
+    .done(function(response) {
+      
+      response = JSON.parse(response);
+      // console.log(response);
+      var option = '<option value="0">Seleccione una opcion</option> ';
+
+      if(response.result){
+        for (var i in response.estatus)
+          option += `<option value="${response.estatus[i].id}">${response.estatus[i].est_detalle}</option>`;
+      }
+
+      $('.comboEstatus').html(option);
+    });
+  }
+
+  function countPrestamo(){
+    dataJson = {
+      type:"count",
+      method:"get",
+      entidad:"prestamo"
+    };
+
+    let countPrestamos = new Ajax('ajax/PrestamoAjax.php','GET', dataJson);
+    countPrestamos.__ajax()
+    .done(function(response){
+      response = JSON.parse(response);
+      // console.log(response);
+      if(response.result){
+        $('#totalPrestamos').html(response.total);
+      }
+    });
+  }
+
   $('#txt-cuota').val('');
   $('#txt-fecha-registro').val(hoy);
 
@@ -260,10 +342,12 @@ $(document).ready(function(){
 
   $('#cmb-plazo').change(function(){
     var op = $('#cmb-plazo option:selected').val();
+    var text = $('#cmb-plazo option:selected').text();
+
 
     if(op != "0"){
-      $('#info-plazo').html(op);
-      plazo = parseInt(op);
+      $('#info-plazo').html(text);
+      plazo = parseInt(text);
 
       calcularCuotasDiarias();
     }else{
@@ -432,37 +516,8 @@ $(document).ready(function(){
             
             if(response.result){
               $('#form-cliente-editar')[0].reset();
-              $('#tb-clientes').DataTable({
-                destroy:true,
-                pageLength:10,
-                responsive:true,
-                processing:true,
-                ajax:'ajax/TablaClientesAjax.php',
-                language:{
-                        "sProcessing":     "Procesando...",
-                        "sLengthMenu":     "Mostrar _MENU_ registros",
-                        "sZeroRecords":    "No se encontraron resultados",
-                        "sEmptyTable":     "Ningún dato disponible en esta tabla",
-                        "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
-                        "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
-                        "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
-                        "sInfoPostFix":    "",
-                        "sSearch":         "Buscar:",
-                        "sUrl":            "",
-                        "sInfoThousands":  ",",
-                        "sLoadingRecords": "Cargando...",
-                        "oPaginate": {
-                            "sFirst":    "Primero",
-                            "sLast":     "Último",
-                            "sNext":     "Siguiente",
-                            "sPrevious": "Anterior"
-                        },
-                        "oAria": {
-                            "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
-                            "sSortDescending": ": Activar para ordenar la columna de manera descendente"
-                        }
-                    }
-              });
+              tablaClientes();           
+
               alerta = __sweetSimpe('Buen trabajo', 'El cliente se ha actualizado correctmente en el sistema', 'success');
               $('.error-datos').html(alerta);
             }
@@ -474,7 +529,125 @@ $(document).ready(function(){
      $('.preguntaAccion').html(alerta);
   });
 
+  $('#btn-prestamo-limpiar').click(function(e){
+    e.preventDefault();
+    $('#form-nuevo-prestamo')[0].reset();
+    $('#cmb-buscador').val(0);
+    limpiarCampos();
+  });
+
+  $('#form-nuevo-prestamo').submit(function(e){
+    e.preventDefault();
+    let ruta = 'ajax/PrestamoAjax.php';
+
+    let alerta = __sweetAlert('¿ Estás seguro ?', 'Los datos préstamo de guardarán', 'warning')
+    .then((result) =>{
+        if(result.value){
+
+          let id_usuario = $('#id-Usuario').attr('value');
+          let id_cliente = $('#cmb-buscador option:selected').val()
+          let id_monto = $('#cmb-monto option:selected').val();
+          let monto = $("#cmb-monto option:selected").text();
+          let id_interes = $('#cmb-interes option:selected').val();
+          let id_plazo = $('#cmb-plazo option:selected').val();
+          let id_estatus = $('#cmb-status option:selected').val();
+          let fecha_inicio = $('#prestamo-fecha-inicio').val();
+          let fecha_fin = $('#prestamo-fecha-fin').val();
+          let cuota_diaria = $('#txt-cuota').val();
+          let observacion = $('#txt-observacion').val();
+          let terminos = $('#prestamo-termino')[0].checked;
+          let acepta = $('#prestamo-termino').val()
+          // alert(id_cliente);
+
+          let prestamoJSON = {
+            type: 'insert',
+            prestamo: {
+              id_usuario: id_usuario,
+              id_cliente: id_cliente,
+              id_monto: id_monto,
+              id_interes: id_interes,
+              id_plazo: id_plazo,
+              id_estatus: id_estatus,
+              monto:monto,
+              total:total,
+              fecha_inicio: fecha_inicio,
+              fecha_fin: fecha_fin,
+              cuota_diaria: cuota_diaria,
+              observacion: observacion,
+              terminos: terminos,
+              acepta: acepta
+            },
+            result : 'true'
+          };
+          // console.log(prestamoJSON);
+
+          if(validarFormNuevoPrestamo(prestamoJSON)){
+            console.log(prestamoJSON);
+
+            var insertarPrestamo = new Ajax(ruta,'POST', prestamoJSON);
+            insertarPrestamo.__ajax()
+            .done(function(response){
+              // //La strinjson convertir a formato JSON
+              response = JSON.parse(response);
+              // console.log(response);
+              
+              if(response.result){
+                $('#form-nuevo-prestamo')[0].reset();
+                limpiarCampos();
+                // console.log(response);
+             
+                alerta = __sweetSimpe('Buen trabajo', 'El préstamo se ha registro correctamente en el sistema', 'success');
+                $('.error-datos').html(alerta);
+              }
+            });
+          }
+        }else{
+        //  alert("Has cancelado la opcion"); 
+        }
+    });
+
+  });
+
 });
+
+function cargarInfoCliente(id){
+  console.log("Id préstamo: " + id);
+}
+
+function tablaClientes(){
+  var tb = $('#tb-clientes').DataTable({
+        destroy:true,
+        pageLength:10,
+        responsive:true,
+        processing:true,
+        ajax:'ajax/TablaClientesAjax.php',
+        language:{
+                "sProcessing":     "Procesando...",
+                "sLengthMenu":     "Mostrar _MENU_ registros",
+                "sZeroRecords":    "No se encontraron resultados",
+                "sEmptyTable":     "Ningún dato disponible en esta tabla",
+                "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
+                "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+                "sInfoPostFix":    "",
+                "sSearch":         "Buscar:",
+                "sUrl":            "",
+                "sInfoThousands":  ",",
+                "sLoadingRecords": "Cargando...",
+                "oPaginate": {
+                    "sFirst":    "Primero",
+                    "sLast":     "Último",
+                    "sNext":     "Siguiente",
+                    "sPrevious": "Anterior"
+                },
+                "oAria": {
+                    "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+                    "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                }
+            }
+  });
+  return tb;
+}
 
 function visualizarDatos(id){
   //console.log("Cargar ajax con id: " + id);
@@ -524,37 +697,7 @@ function deleteCliente(id){
           var tr = $(selector).parent().parent();
           //console.log(tr);
           //tr.remove();
-          $('#tb-clientes').DataTable({
-            destroy:true,
-            pageLength:10,
-            responsive:true,
-            processing:true,
-            ajax:'ajax/TablaClientesAjax.php',
-            language:{
-                    "sProcessing":     "Procesando...",
-                    "sLengthMenu":     "Mostrar _MENU_ registros",
-                    "sZeroRecords":    "No se encontraron resultados",
-                    "sEmptyTable":     "Ningún dato disponible en esta tabla",
-                    "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
-                    "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
-                    "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
-                    "sInfoPostFix":    "",
-                    "sSearch":         "Buscar:",
-                    "sUrl":            "",
-                    "sInfoThousands":  ",",
-                    "sLoadingRecords": "Cargando...",
-                    "oPaginate": {
-                        "sFirst":    "Primero",
-                        "sLast":     "Último",
-                        "sNext":     "Siguiente",
-                        "sPrevious": "Anterior"
-                    },
-                    "oAria": {
-                        "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
-                        "sSortDescending": ": Activar para ordenar la columna de manera descendente"
-                    }
-                }
-          });
+          tablaClientes();
 
          alerta = __sweetSimpe('Buen trabajo', 'El cliente se ha eliminado correctmente del sistema', 'success');
          $('.error-datos').html(alerta);
@@ -564,6 +707,89 @@ function deleteCliente(id){
     }
   });
   $('.preguntaAccion').html(alerta);
+}
+
+function deletePrestamo(id){
+  let ruta = 'ajax/PrestamoAjax.php';
+  let alerta = __sweetAlert('¿Estás seguro?','Los datos del cliente se eliminará del sistema','warning')
+  .then((result) =>{
+      if(result.value){
+        // console.log("Click en eliminar préstamo");
+        let dataJson = {
+          type:'delete',
+          method:'get',
+          entidad:'clientes',
+          id: id
+        };
+
+      let eliminar = new Ajax(ruta,'GET', dataJson);
+      eliminar.__ajax()
+        .done(function(response){
+          response = JSON.parse(response);
+          console.log(response);
+
+          if(response.result){
+            alerta = __sweetSimpe('Buen trabajo', 'El préstamo se ha eliminado correctmente del sistema', 'success');
+            $('.error-datos').html(alerta);
+          }
+
+          $('#ep-'+ id).fadeOut(1200);
+        });
+      }
+  });
+  $('.preguntaAccion').html(alerta);
+}
+
+function ocultarPrestamo(id){
+  let ruta = 'ajax/PrestamoAjax.php';
+
+  // alert("El préstamo se ha ocultado");
+  let dataJson = {
+    type:'hide',
+    method:'get',
+    entidad:'clientes',
+    id: id
+  };
+
+let ocultar = new Ajax(ruta,'GET', dataJson);
+ocultar.__ajax()
+  .done(function(response){
+    response = JSON.parse(response);
+    // console.log(response);
+
+    if(response.result){
+      alerta = __sweetSimpe('Buen trabajo', 'El préstamo se ha movido a lista de los Ocultos', 'success');
+      $('.error-datos').html(alerta);
+    }
+
+    $('#ep-'+ id).fadeOut(1200);
+  });
+}
+
+function mostrarPrestamo(id){
+  let ruta = 'ajax/PrestamoAjax.php';
+
+  // alert("El préstamo se ha ocultado");
+  let dataJson = {
+    type:'show',
+    method:'get',
+    entidad:'clientes',
+    id: id
+  };
+
+  let ocultar = new Ajax(ruta,'GET', dataJson);
+  ocultar.__ajax()
+    .done(function(response){
+      response = JSON.parse(response);
+      // console.log(response);
+
+      if(response.result){
+        alerta = __sweetSimpe('Buen trabajo', 'El préstamo se ha movido a lista de Todos los préstamos', 'success');
+        $('.error-datos').html(alerta);
+      }
+
+      $('#ep-'+ id).fadeOut(1200);
+    });
 }
 
 //Sweet Alert
@@ -621,6 +847,53 @@ function validarFormCliente(data){
    return  true; 
 }
 
+//Validacion del form para nuevo Préstamo
+function validarFormNuevoPrestamo(data){
+  var alerta;
+
+  if(data.prestamo.id_cliente == '' || data.prestamo.id_cliente <= 0){
+    alerta = __sweetSimpe('Ups falta cliente', 'Necesitas seleccionar un cliente para continuar','error');
+    $('.error-datos').html(alerta);
+    return false;
+  }
+  else if(data.prestamo.id_monto == '' || data.prestamo.id_monto <= 0){
+    alerta = __sweetSimpe('Ups falta monto', 'Necesitas seleccionar un monto para continuar','error');
+    $('.error-datos').html(alerta);
+    return false;
+  }
+  else if(data.prestamo.id_interes == '' || data.prestamo.id_interes <= 0){
+    alerta = __sweetSimpe('Ups falta el interes', 'Necesitas seleccionar un interes al monto para continuar','error');
+    $('.error-datos').html(alerta);
+    return false;
+  }
+  else if(data.prestamo.id_plazo == '' || data.prestamo.id_plazo <= 0){
+    alerta = __sweetSimpe('Ups falta el plazo', 'Necesitas seleccionar un plazo de pago para continuar','error');
+    $('.error-datos').html(alerta);
+    return false;
+  }
+  else if(data.prestamo.id_estatus == '' ||  data.prestamo.id_estatus <= 0){
+    alerta = __sweetSimpe('Ups falta el estatus', 'Necesitas seleccionar un estatus para continuar','error');
+    $('.error-datos').html(alerta);
+    return false;
+  }
+  else if(data.prestamo.fecha_inicio == ''){
+    alerta = __sweetSimpe('Ups falta fecha de inicio', 'Necesitas ingresar una fecha de inicio','error');
+    $('.error-datos').html(alerta);
+    return false;
+  }
+  else if(data.prestamo.fecha_fin == ''){
+    alerta = __sweetSimpe('Ups falta fecha de finalización', 'Necesitas ingresar una fecha de fin del préstamo','error');
+    $('.error-datos').html(alerta);
+    return false;
+  }
+  else if(!data.prestamo.terminos){
+    alerta = __sweetSimpe('Ups debe aceptar los términos', 'El cliente debe comprometerse a pagar el total prestado más interes acordado','error');
+    $('.error-datos').html(alerta);
+    return false;
+  }
+  return true;
+}
+
 //===============================================
 function datosPerfilForm(usuario){
   $('#perfil-nombres').val(usuario.usu_nombres);
@@ -652,7 +925,6 @@ function datosPerfilForm(usuario){
       sexo[1].checked = false;
     }
   }
-  
 }
 
 function formularioEditarCliente(cliente){
@@ -681,7 +953,7 @@ function oculat_info_pie() {
 function calcularCuotasDiarias(){
   if(plazo != 0 && monto != 0 && interes != 0){
     // alert("Calcular cuota diaria");
-    var total = monto + (monto * (interes/100));
+    total = monto + (monto * (interes/100));
     n_cuotas = total/plazo;
 
     $('#txt-cuota').val(n_cuotas);
@@ -740,13 +1012,6 @@ function actualizarHora(i) {
 }
 
 function limpiarCampos(){
-    $('#cmb-monto').val($('#cmb-monto > option:first').val());
-    $('#cmb-interes').val($('#cmb-interes > option:first').val());
-    $('#cmb-plazo').val($('#cmb-plazo > option:first').val());
-    $('#cmb-status').val($('#cmb-status > option:first').val());
-    $('#txt-cuota').val('');
-    $('#txt-observacion').val('');
-    $('#txt-cuota-pago').val('');
 
     $('#info-monto').html('-');
     $('#info-interes').html('-');

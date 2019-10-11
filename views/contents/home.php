@@ -1,11 +1,11 @@
 
 <!-- Small boxes (Stat box) -->
-<div class="row">
+<div class="row aki empieza el home">
   <div class="col-lg-3 col-6">
     <!-- small box -->
     <div class="small-box bg-info">
       <div class="inner">
-        <h3 class="total-clientes"></h3>
+        <h3 class="total-clientes"><i class="fas fa-spinner"></i></h3>
 
         <p>Total de Clientes</p>
       </div>
@@ -21,14 +21,15 @@
     <!-- small box -->
     <div class="small-box bg-success">
       <div class="inner">
-        <h3>53<sup style="font-size: 20px">%</sup></h3>
+        <h3 id="totalPrestamos"> <i class="fas fa-spinner"></i></sup></h3>
 
-        <p>Bounce Rate</p>
+        <p>N° Préstamos</p>
       </div>
       <div class="icon">
-        <i class="ion ion-stats-bars"></i>
+        <!-- <i class="ion ion-stats-bars"></i> -->
+        <i class="fas fa-hand-holding-usd"></i>
       </div>
-      <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+      <a href="<?= BASE?>prestamoListar" class="small-box-footer">Más info <i class="fas fa-arrow-circle-right"></i></a>
     </div>
   </div>
   <!-- ./col -->

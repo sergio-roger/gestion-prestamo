@@ -33,7 +33,7 @@ if(isset($_GET['data'])){
     else if($entidad == 'intereses'){
         include '../controllers/InteresController.php';
         $interesController= new InteresController();
-        $data['entidad'] = 'intereses';
+        // $data['entidad'] = 'intereses';
 
         if($type == 'all'){
             $intereses = $interesController->all();
@@ -43,9 +43,34 @@ if(isset($_GET['data'])){
             }
         }
     }
-    
+    else if($entidad == 'plazos'){
+        include '../controllers/PlazoController.php';
+        $plazoController = new PlazoController();
+        $periodo = $datos->{'modo'};
+
+        if($type == 'all'){
+            $plazos = $plazoController->getPlazo($periodo);
+
+           while($row = $plazos->fetch(PDO::FETCH_ASSOC)){
+                $data['plazos'][] = $row;
+           }
+        }
+    }
+    else if($entidad == 'estatus'){
+        include '../controllers/EstatusController.php';
+        $estatusController = new EstatusController();
+
+        if($type = 'all'){
+            $estatus = $estatusController->all();
+
+            while($row = $estatus->fetch(PDO::FETCH_ASSOC)){
+                $data['estatus'][] = $row;
+            }
+        }
+    }
+
     $data = $helper->utf8ize($data);
 }
 
-echo json_encode($data);
 $peticionAjax = false;
+echo json_encode($data);

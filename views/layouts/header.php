@@ -33,7 +33,12 @@
   <!-- Select2 -->
   <link rel="stylesheet" href="<?= BASE?>assets/plugins/select2/css/select2.min.css">
   <link rel="stylesheet" href="<?= BASE?>assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+
+  <!-- Plugins parael preloader circle animated -->
+  <link rel="stylesheet" href="<?= BASE?>assets/plugins/Animated-Circles/css/gspinner.min.css">
   <!-- Estilos personlizados -->
   <link rel="stylesheet" href="<?= BASE?>assets/dist/css/style.css">
+  <!-- jQuery -->
+  <script src="<?= BASE?>assets/plugins/jquery/jquery.min.js"></script>
 </head>
 

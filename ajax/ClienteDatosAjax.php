@@ -5,6 +5,8 @@ include '../core/config.php';
 $peticionAjax = true;
 $data = [];
 
+// var_dump($_POST['data']);
+
 if(isset($_POST['data'])){
     include '../controllers/ClienteController.php';
     $clienteController = new ClienteController();
@@ -22,6 +24,7 @@ if(isset($_POST['data'])){
     else if($type == 'update'){
         $id = $datos->{'id'};
         $cliente = (array)$datos->{'cliente'};
+        // var_dump($cliente);
         $respuesta = $clienteController->update($id, $cliente);
         $data['result'] = $respuesta;
     }

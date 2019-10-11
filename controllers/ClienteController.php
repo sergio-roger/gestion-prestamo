@@ -2,17 +2,48 @@
 
 if($peticionAjax){
     require_once '../models/ClienteModel.php';
+    require_once '../core/url.php';
 }
 else{
     require_once 'models/ClienteModel.php';
+    include_once 'core/url.php';
 }
 
 class ClienteController {
     private $clienteModel;
+    private $url;
 
     public function __construct()
     {
+        $this->url =  new Url();
         $this->clienteModel = new ClienteModel('clientes');
+    }
+
+    public function index($vista){
+        $ruta = $this->url->getArrayUrl();
+        $tipoVista = $this->url->splitCamelCase($ruta[3]);
+        // var_dump($tipoVista);
+        
+        $this->renderizarVista($tipoVista['parte_2'], $vista);
+        // include $vista;
+    }
+
+    private function renderizarVista($tipo, $vista){
+        switch($tipo){
+
+            case "Nuevo":
+                include $vista;
+                break;
+
+            case "Listar":
+                include $vista;
+                break;
+
+            case "Informacion":
+                $idCliente = $this->url->getParametro();
+                include $vista;
+                break;
+        }
     }
 
     public function insert($datos){

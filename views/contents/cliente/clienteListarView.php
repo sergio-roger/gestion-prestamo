@@ -17,10 +17,11 @@
 </div>
 
 <!-- <div class="row"> -->
-    <!-- <div class="col-md-12 p-1 table-responsive"> -->
+    <div class="col-md-12 p-1 table-responsive">
         <table class="table table-hover table-condensed table-bordered table-striped" id="tb-clientes" style="background:#fff;">
             <thead>
-                <tr>
+                <tr class="">
+                    <!-- <th class=""></th>4 -->
                     <th scope="col" class="text-center"># ID</th>
                     <th scope="col">Nombres</th>
                     <th scope="col">Apellidos</th>
@@ -60,7 +61,7 @@
                 <th scope="col" class="text-center">Eliminar</th>
             </tfoot>
         </table>
-    <!-- </div> -->
+    </div>
 <!-- </div> -->
 
 <div id="modalAgregarCliente"></div>

@@ -15,6 +15,10 @@ class UsuarioController
         $this->usuarioModel = new UsuarioModel('usuarios');
     }
 
+    public function index($vista){
+        include $vista;
+    }
+
     public function insertShort(){
        $rol = 1;
        $nombres = $this->usuarioModel->cleanString($_POST['nombres']);

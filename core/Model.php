@@ -19,7 +19,7 @@ class Model{
     }
 
     protected function Conectar(){
-        $enlace = new PDO(SGBD, USER, PASS);
+        $enlace = new PDO(SGBD.';charset=utf8', USER, PASS);
         return $enlace;
     }
 

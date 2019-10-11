@@ -39,6 +39,10 @@
   box-shadow: 1px 1px 2px rgba(0,0,0,.3);
 }
 
+.scale-card:hover{
+  transform: scale(1.05);
+}
+
 @media (max-width:575px){
     .margin-a{
       margin-top:15px;

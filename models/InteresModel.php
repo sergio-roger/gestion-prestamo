@@ -16,4 +16,10 @@ class InteresModel extends Model{
     public function all(){
         return Model::all();
     }
+
+    public function allByOrder($campo, $orden = 'ASC'){
+        $sql = "SELECT * FROM $this->tabla WHERE estado = 'A' ORDER BY $campo $orden";
+        $stmt = Model::ejecutarSQL($sql);
+        return $stmt;
+    }
 }

@@ -24,8 +24,8 @@ while($row = $datos->fetch(PDO::FETCH_ASSOC)){
 
     $list[] = [
         "0" => '<div class="w-100 text-center">'.$row["id"].'</div>',
-        "1" => $row["cli_nombres"],
-        "2" => $row["cli_apellidos"],
+        "1" => '<a href="'.BASE.'clienteInformacion/'.$row["id"].'">'.$row["cli_nombres"].'</a>',
+        "2" => '<a href="'.BASE.'clienteInformacion/'.$row["id"].'">'.$row["cli_apellidos"].'</a>',
         "3" => '<div class="w-100 text-center">'.$row["cli_edad"].'</div>',
         "4" => $row["cli_lugar_cobro"],
         "5" => $editar,

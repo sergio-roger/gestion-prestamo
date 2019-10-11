@@ -16,8 +16,7 @@ class ClienteModel extends Model{
         parent::__construct($tabla);
     }
 
-    public function insert($datos)
-    {
+    public function insert($datos){
         if(is_array($datos)){
             $fechaActual = date('Y-m-d');
 
@@ -49,7 +48,17 @@ class ClienteModel extends Model{
     public function update($id, $datos){
         $fechaActual = date('Y-m-d H:i:s');
 
-        $sql = 'UPDATE '  .$this->tabla .' SET `cli_nombres`= :nombres,`cli_apellidos`= :apellidos, `cli_correo`=:correo,`cli_sexo`=:sexo, `cli_edad`=:edad,`cli_telefono`=:telefono,`cli_lugar_trabajo`=:lugar_trabajo, `cli_lugar_cobro`= :lugar_trabajo,`cli_fecha_update`= :fecha_update WHERE id = :cli_id';
+        //Limpiar y escapar los datos de una posibe inyeccion y ataque xss
+        $datos['cli_nombres'] = Model::cleanString($datos['cli_nombres']);
+        $datos['cli_apellidos'] = Model::cleanString($datos['cli_apellidos']);
+        $datos['cli_correo'] = Model::cleanString($datos['cli_correo']);
+        $datos['cli_sexo'] = Model::cleanString($datos['cli_sexo']);
+        $datos['cli_edad'] = Model::cleanString($datos['cli_edad']);
+        $datos['cli_telefono'] = Model::cleanString($datos['cli_telefono']);
+        $datos['cli_lugar_trabajo'] = Model::cleanString($datos['cli_lugar_trabajo']);
+        $datos['cli_lugar_cobro'] = Model::cleanString($datos['cli_lugar_cobro']);
+
+        $sql = 'UPDATE '  .$this->tabla .' SET `cli_nombres`= :nombres,`cli_apellidos`= :apellidos, `cli_correo`=:correo,`cli_sexo`=:sexo, `cli_edad`=:edad,`cli_telefono`=:telefono,`cli_lugar_trabajo`=:lugar_trabajo, `cli_lugar_cobro`= :lugar_cobro,`cli_fecha_update`= :fecha_update WHERE id = :cli_id';
 
         $stmt = Model::Conectar()->prepare($sql);
             

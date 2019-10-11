@@ -1,5 +1,5 @@
   <!-- Main Sidebar Container -->
-  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+  <aside class="main-sidebar sidebar-dark-primary elevation-4 aki-empieza-el-sidebar">
     <!-- Brand Logo -->
     <a href="#" class="brand-link">
       <img src="<?= BASE?>assets/dist/img/AdminLTELogo.png"
@@ -81,9 +81,21 @@
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a id="btn-prestamoNuevo" href="<?= BASE?>prestamoNuevo" class="nav-link">
+                  <a id="" href="<?= BASE?>prestamoNuevo" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Nuevo préstamo</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a id="btn-prestamoNuevo" href="<?= BASE?>prestamoListar" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Ver todos los préstamos</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a id="" href="<?= BASE?>prestamoOcultos" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Lista de Ocultos</p>
                   </a>
                 </li>
               </ul>
@@ -337,3 +349,5 @@
     </div>
     <!-- /.sidebar -->
   </aside>
+
+  <!-- <div class="Aki termina el sidebar"></div> -->

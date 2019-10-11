@@ -14,4 +14,21 @@ class Helper {
             return utf8_encode($d);
         return $d;
     }
+
+    public function splitCamelCase($ruta){
+        
+        preg_match_all('/((?:^|[A-Z])[a-z]+)/',$ruta, $this->matches);
+         //var_dump($this->matches);
+         $part1 = $this->matches[0];
+            
+        if(!isset($part1[1])){
+            $part1[1] = '';
+        }
+        
+         $partes = [
+             'parte_1' => $part1[0],
+             'parte_2' => $part1[1]
+         ];
+         return $partes;
+    }
 }   

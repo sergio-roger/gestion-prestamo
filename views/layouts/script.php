@@ -1,5 +1,4 @@
-<!-- jQuery -->
-<script src="<?= BASE?>assets/plugins/jquery/jquery.min.js"></script>
+
 <!-- Bootstrap 4 -->
 <script src="<?= BASE?>assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- Select2 -->
@@ -16,6 +15,8 @@
 <script src="<?= BASE?>assets/dist/js/adminlte.min.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="<?= BASE?>assets/dist/js/demo.js"></script>
+<!-- Script para el preloader animated circles -->
+<script src="<?= BASE?>assets/plugins/Animated-Circles/js/g-spinner.min.js"></script>
 
 <!-- Js personalizado -->
 <script src="<?= BASE?>assets/dist/js/peticionesAjax.js"></script>

@@ -17,7 +17,8 @@ class FileName{
     //Agregar mas archivos
     private function listaBlanca(){
         $this->listaBlanca = [
-            'clienteListar','clienteNuevo','cuotaNueva','prestamoNuevo','home','usuarioPerfil'
+            'clienteListar','clienteNuevo','cuotaNueva','prestamoNuevo','home','usuarioPerfil','prestamoListar',
+            'clienteInformacion','clientePrueba','prestamoOcultos'
         ];
     }
     

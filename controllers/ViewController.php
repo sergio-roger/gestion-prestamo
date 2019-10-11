@@ -1,5 +1,6 @@
 <?php
 require_once 'models/ViewModel.php';
+require_once 'core/Helper.php';
 
 class ViewController{
 
@@ -30,4 +31,14 @@ class ViewController{
             return null;
         }
     }
+
+    public function getClase($direccion){
+        $helper = new Helper();
+
+        $array = $helper->splitCamelCase($direccion);
+        $clase = ucfirst($array['parte_1']);
+        $clase = $clase.'Controller';
+        return $clase;
+    }
+    
 }

@@ -8,6 +8,7 @@
 
   $peticionAjax = false;
 
+  $helper = new Helper();
   $vista = new ViewController();
   $vw = $vista->view();
   $direccion =  $vista->getDireccion();
@@ -52,12 +53,23 @@
     include_once 'layouts/sidebar.php';   //Barra lateral o menu de opciones
     
     //Inicio dinámico
+    // echo '<div class="Aki empieza la barra de direccion"></div>';
+
     $barraDireccion = new BarraDireccionController($direccion);
     $barraDireccion->index();             //Barra de dirección 
    
-    include $vw;
+    $controllerPrincipal = $vista->getClase($direccion);   //Obtener la clase del respectivo controlador
+
+    //Llamar al respectivo controlador y ejecutar el método index()
+    include_once 'controllers/'.$controllerPrincipal.'.php';
+    // $in = 'controllers/'.$controllerPrincipal.'.php';
+    $instancia = new $controllerPrincipal();
+    $instancia->index($vw);
+
+    // include $vw;  //$vw es la direccion del include de la vista
     //Fin dinámico
-  
+    // 
+
     include_once 'layouts/footer.php';  //Footer
   }
 

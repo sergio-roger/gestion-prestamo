@@ -11,7 +11,7 @@
       </div>
       <!-- /.card-header -->
       <!-- form start -->
-      <form role="form">
+      <form role="form" method="POST" id="form-nuevo-prestamo">
         <div class="card-body">
           
           <div class="form-group">
@@ -52,12 +52,8 @@
                   <!-- select -->
                   <div class="form-group">
                     <label>Plazo en días</label>
-                    <select class="form-control" id="cmb-plazo">
-                      <option value="0" selected>Seleccione una opcion</option>
-                      <option>30</option>
-                      <option>40</option>
-                      <option>50</option>
-                      <option>60</option>
+                    <select class="form-control comboPlazos" id="cmb-plazo">
+                      <!-- <option value="0" selected>Seleccione una opcion</option> -->
                     </select>
                   </div>
                   </div>
@@ -67,12 +63,8 @@
                 <!-- select -->
                 <div class="form-group">
                     <label>Estatus</label>
-                    <select class="form-control" id="cmb-status">
-                      <option value="0" selected>Seleccione una opcion</option>
-                      <option>Inicio</option>
-                      <option>Cancelando</option>
-                      <option>Renovado</option>
-                      <option>Finalizado</option>
+                    <select class="form-control comboEstatus" id="cmb-status">
+                      <!-- <option value="0" selected>Seleccione una opcion</option> -->
                     </select>
                   </div>
               </div>
@@ -83,7 +75,7 @@
                 <div class="form-group">
                     <label for="cliente">Fecha Inicio</label>
                     <div class="cliente-box d-flex">
-                      <input type="date" class="form-control" id="cliente" placeholder="">
+                      <input type="date" class="form-control" id="prestamo-fecha-inicio" placeholder="">
                     </div>
                 </div>
             </div>
@@ -92,7 +84,7 @@
                 <div class="form-group">
                     <label for="cliente">Fecha Fin</label>
                     <div class="cliente-box d-flex">
-                      <input type="date" class="form-control" id="cliente" placeholder="">
+                      <input type="date" class="form-control" id="prestamo-fecha-fin" placeholder="">
                     </div>
                 </div>
             </div>
@@ -128,7 +120,7 @@
           </div>
 
           <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="termino" value="S">
+            <input type="checkbox" class="form-check-input" id="prestamo-termino" value="S" name='prestamo-termino'>
             <label class="form-check-label" for="termino" value="S">Acepta cancelar regularmente todas las cuotas</label>
           </div>
         </div>
@@ -136,7 +128,7 @@
 
         <div class="card-footer">
           <button type="submit" class="btn btn-primary">Realizar préstamo</button>
-          <button class="btn btn-dark" id="btn-limpiar">Limpiar campos</button>
+          <button class="btn btn-dark" id="btn-prestamo-limpiar">Limpiar campos</button>
         </div>
       </form>
     </div>

@@ -15,7 +15,7 @@ class InteresController{
     }
 
     public function all(){
-        $datos = $this->interesModel->all();
+        $datos = $this->interesModel->allByOrder('int_porcentaje', 'ASC');
 
         if($datos->rowCount() > 1){
             return $datos;
