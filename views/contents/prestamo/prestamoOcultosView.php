@@ -1,6 +1,16 @@
 <div id="loader"></div>
 
 <div id="seccion-listar-prestamos-ocultos" class="d-none">
+
+    <div class="row">
+        <div class="col-12 col-md-3">
+            <a href="<?= BASE?>prestamoListar" class="btn bg-maroon color-palette">
+                <span>Ver todos los préstamos</span>
+                <i class="fas fa-eye ml-2"></i>
+            </a>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-12">
             <!-- <h3>Hola</h3> -->
@@ -112,14 +122,15 @@
                                 </div>
 
                                 <div class="d-flex justify-content-around mt-3">
-                                    <button class="btn btn-outline-dark" onclick="mostrarPrestamo(${response.prestamos[i].id})">
+                                    <button class="btn btn-outline-dark" onclick="mostrarPrestamo(${response.prestamos[i].id})"
+                                    data-toggle="tooltip" title="Mostrar en la lista de préstamos" data-placement="top">
                                         <i class="fas fa-eye"></i>
                                     </button>
                                 </div>
                 
                             </div>
                             <div class ="card-footer d-flex justify-content-center ${bgGradientColor}">
-                                <a href="#" class="small-box-footer text-white">
+                                <a href="<?= BASE?>prestamoInformacion/${response.prestamos[i].id}" class="small-box-footer text-white">
                                     Mas info
                                     <i class="fas fa-arrow-circle-right"></i>
                                 </a>

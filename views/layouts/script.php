@@ -1,6 +1,10 @@
 
+<!-- Popers -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.7/js/tether.min.js"></script>
 <!-- Bootstrap 4 -->
 <script src="<?= BASE?>assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- Chart JS -->
+<script src="<?= BASE?>assets/plugins/chart.js/Chart.min.js"></script>
 <!-- Select2 -->
 <script src="<?= BASE?>assets/plugins/select2/js/select2.full.min.js"></script>
 <!-- SweetAlert2 -->

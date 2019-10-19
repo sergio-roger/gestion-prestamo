@@ -144,3 +144,14 @@ NO SQL
 SQL SECURITY 
 DEFINER 
 SELECT * , (SELECT CONCAT(clientes.cli_nombres,' ', clientes.cli_apellidos) FROM clientes where prestamos.cli_id = clientes.id) as nombres, (SELECT montos.mon_cantidad from montos where montos.id = prestamos.mon_id) as monto, (SELECT intereses.int_porcentaje from intereses where intereses.id = prestamos.int_id) as interes, (SELECT plazos.pla_duracion from plazos where plazos.id = prestamos.pla_id) as plazoDuracion, (SELECT plazos.pla_periodo FROM plazos where plazos.id = prestamos.pla_id)AS plazoPeriodo, (SELECT CONCAT(usuarios.usu_nombres,' ', usuarios.usu_apellidos) FROM usuarios where usuarios.id = prestamos.usu_id) as usuarios FROM prestamos WHERE pres_visible = 'O' and estado = 'A' ORDER BY 1 DESC 
+
+
+#Para obtener un unico préstamos
+CREATE PROCEDURE `getPrestamo`(IN `id_pres` INT) 
+COMMENT 'Para obtener un prestamo en particular' 
+NOT DETERMINISTIC 
+NO SQL 
+SQL SECURITY DEFINER 
+SELECT * , (SELECT CONCAT(clientes.cli_nombres,' ', clientes.cli_apellidos) FROM clientes where prestamos.cli_id = clientes.id) as nombres, (SELECT montos.mon_cantidad from montos where montos.id = prestamos.mon_id) as monto, (SELECT intereses.int_porcentaje from intereses where intereses.id = prestamos.int_id) as interes,
+(SELECT estatus.est_detalle from estatus where estatus.id = prestamos.est_id) as det_estatus, (SELECT plazos.pla_duracion from plazos where plazos.id = prestamos.pla_id) as plazoDuracion, (SELECT plazos.pla_periodo FROM plazos where plazos.id = prestamos.pla_id)AS plazoPeriodo, (SELECT CONCAT(usuarios.usu_nombres,' ', usuarios.usu_apellidos) FROM usuarios where usuarios.id = prestamos.usu_id) as usuarios FROM prestamos WHERE estado = 'A' and 
+id = id_pres

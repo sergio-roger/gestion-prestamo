@@ -68,6 +68,38 @@ elseif($method == 'GET'){
             $response['text'] = 'Préstamo Oculto';
             $response['result'] = $respuesta;
         }
+        elseif($data->{'type'} == 'one'){
+            $id = $data->{'id'};
+            $prestamo = $prestamoController->getPrestamo($id);
+            $response['prestamo'] = $prestamo;
+        }
+        elseif($data->{'type'} == 'onePrestamo'){
+            $id = $data->{'id'};
+            $prestamo = $prestamoController->getPrestamoInfo($id);
+            $response['prestamo'] = $prestamo->fetch(PDO::FETCH_ASSOC);
+            // $response['text'] = 'Llamar al procedimiento almacenado';
+        }
+    }
+}
+elseif($method == 'PUT'){
+    $response['result'] = 'true';
+    $data = '';
+
+    parse_str(file_get_contents("php://input"), $data);  //Así se recoge peticiones PUT
+    $data = json_decode($data['data'], true);
+    // var_dump($data);
+
+    if(is_array($data)){
+        if($data['type'] == 'update'){
+           $update = [
+               'observacion' => $data['observacion'],
+               'id_estatus' => $data['id_estatus'],
+               'id' => $data['id']
+           ];
+           
+           //Función para actualizar los datos del préstamo
+           $response['estado'] = $prestamoController->updateShort($update);
+        } 
     }
 }
 

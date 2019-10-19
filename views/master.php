@@ -68,8 +68,7 @@
 
     // include $vw;  //$vw es la direccion del include de la vista
     //Fin dinámico
-    // 
-
+    //
     include_once 'layouts/footer.php';  //Footer
   }
 

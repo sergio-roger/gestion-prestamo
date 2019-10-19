@@ -37,6 +37,10 @@ class PrestamoController{
                 include $vista;
                 break;
 
+            case "Informacion":
+                $idPrestamo = $this->url->getParametro();
+                include $vista;
+                break;
             // case "Informacion":
             //     $idCliente = $this->url->getParametro();
             //     include $vista;
@@ -117,5 +121,22 @@ class PrestamoController{
 
         if($respuesta) return true;
         else           return false;
+    }
+
+    public function getPrestamo($id){
+        $prestamo = $this->prestamoModel->getPrestamo($id);
+        return $prestamo;
+    }
+
+    public function getPrestamoInfo($id){
+        $prestamo = $this->prestamoModel->getPrestamoInfo($id);
+        return $prestamo;
+    }
+
+    public function updateShort($datos){
+        $respuesta = $this->prestamoModel->updateShort($datos);
+        
+        if($respuesta)  return true;
+        else            return false;
     }
 }

@@ -1,6 +1,7 @@
 // $('.daterangepicker')
 var monto = 0, interes = 0, plazo = 0; 
 var total = 0, n_cuotas;
+var arrayEstatus = [];
 var span = ' <span>$</span>';
 var BASE = 'http://localhost:8080/Webs/CrediExpress-Des/';
 
@@ -8,7 +9,7 @@ $(document).ready(function(){
   var hoy = obtenerFecha();
 
   __init__();
-
+  
   function __init__(){
     procesos();
     peticionesAjax();
@@ -19,10 +20,11 @@ $(document).ready(function(){
     startTime();
     validarNumeros();
     onlyNumbers();
+    filtrarPrestamos();
   }
-
+  
   function peticionesAjax(){
-
+  
     let peticiones = {
       result: true,
       funciones: {
@@ -45,9 +47,10 @@ $(document).ready(function(){
     getIntereses();
     getPlazos();
     getEstatus();
+    getEstatusFiltro();
     // listaPrestamos();
     countPrestamo();
-
+  
     console.log(peticiones);
   }
 
@@ -64,7 +67,7 @@ $(document).ready(function(){
     .done(function(response){
       response = JSON.parse(response);
       // console.log(response);
-
+  
       if(response.result){
         var usuario = response.data;
         var name  = usuario.usu_nombres + ' ' + usuario.usu_apellidos
@@ -94,7 +97,7 @@ $(document).ready(function(){
     };
   
     //dataJson = JSON.stringify(dataJson);
-    var allClientes = new Ajax('ajax/DatosGeneraleAjax.php','GET', dataJson);
+    let allClientes = new Ajax('ajax/DatosGeneraleAjax.php','GET', dataJson);
     
     allClientes.__ajax()
     .done(function(response){
@@ -112,7 +115,7 @@ $(document).ready(function(){
         //$('.prestamo-clientes').html(tablaCliente);
         $('.lista-clientes').html(comboCliente);
         //console.log(response);
-
+  
       }
     });
   }
@@ -153,7 +156,7 @@ $(document).ready(function(){
 
   function countClientes() {
     var ruta = 'ajax/DatosGeneraleAjax.php';
-
+  
     //Formato JSON
     var dataJson = {
       type:'count',
@@ -161,9 +164,9 @@ $(document).ready(function(){
       entidad: 'clientes',
       archivo: ruta
     };
-
+  
     var contar = new Ajax('ajax/DatosGeneraleAjax.php','GET', dataJson);
-
+  
     contar.__ajax()
     .done(function(response){
     //  console.log(response);
@@ -186,21 +189,21 @@ $(document).ready(function(){
     };
   
     let  montos = new Ajax(ruta,'GET', dataJson);
-
+  
     montos.__ajax()
     .done(function(response){
       response = JSON.parse(response);
       var option = '<option value="0">Seleccione una opcion</option> ';
-
+  
       if(response.result){
         for (var i in response.montos)
           option += `<option value="${response.montos[i].id}">${response.montos[i].mon_cantidad}</option>`;
       }
       $('.comboMontos').html(option);
     });
-
+  
   }
-
+  
   function getIntereses(){
     let ruta = 'ajax/LlenarCombosAjax.php';
   
@@ -216,7 +219,7 @@ $(document).ready(function(){
     .done(function(response) {
       response = JSON.parse(response);
       var option = '<option value="0">Seleccione una opcion</option> ';
-
+  
       if(response.result){
         for (var i in response.intereses)
           option += `<option value="${response.intereses[i].id}">${response.intereses[i].int_porcentaje}</option>`;
@@ -224,17 +227,17 @@ $(document).ready(function(){
       $('.comboIntereses').html(option);
     });
   }
-  
+
   function getPlazos(){
     let ruta = 'ajax/LlenarCombosAjax.php';
-
+  
     let dataJson = {
       type:'all',
       method:'get',
       entidad:'plazos',
       modo: 'dias'
     }
-
+  
     let  plazos = new Ajax(ruta,'GET', dataJson);
     
     plazos.__ajax()
@@ -243,25 +246,25 @@ $(document).ready(function(){
       response = JSON.parse(response);
       // console.log(response);
       var option = '<option value="0">Seleccione una opcion</option> ';
-
+  
       if(response.result){
         for (var i in response.plazos)
           option += `<option value="${response.plazos[i].id}">${response.plazos[i].pla_duracion}</option>`;
       }
       $('.comboPlazos').html(option);
     });
-
+  
   }
-
+  
   function getEstatus(){
     let ruta = 'ajax/LlenarCombosAjax.php';
-
+  
     let dataJson = {
       type:'all',
       method:'get',
       entidad:'estatus',
     }
-
+  
     let  estatus = new Ajax(ruta,'GET', dataJson);
     
     estatus.__ajax()
@@ -270,13 +273,45 @@ $(document).ready(function(){
       response = JSON.parse(response);
       // console.log(response);
       var option = '<option value="0">Seleccione una opcion</option> ';
+  
+      arrayEstatus = [];
 
+      if(response.result){
+        for (var i in response.estatus){
+          arrayEstatus.push(response.estatus[i].id);
+          option += `<option value="${response.estatus[i].id}">${response.estatus[i].est_detalle}</option>`;
+        }
+
+      }
+  
+      $('.comboEstatus').html(option);
+    });
+  }
+
+  function getEstatusFiltro(){
+    let ruta = 'ajax/LlenarCombosAjax.php';
+  
+    let dataJson = {
+      type:'all',
+      method:'get',
+      entidad:'estatus',
+    }
+  
+    let  estatus = new Ajax(ruta,'GET', dataJson);
+    
+    estatus.__ajax()
+    .done(function(response) {
+      
+      response = JSON.parse(response);
+      // console.log(response);
+      var option = '<option value="0">Todos</option> ';
+  
       if(response.result){
         for (var i in response.estatus)
           option += `<option value="${response.estatus[i].id}">${response.estatus[i].est_detalle}</option>`;
       }
-
-      $('.comboEstatus').html(option);
+  
+      $('.comboEstatusFiltro').html(option);
     });
   }
 
@@ -286,7 +321,7 @@ $(document).ready(function(){
       method:"get",
       entidad:"prestamo"
     };
-
+  
     let countPrestamos = new Ajax('ajax/PrestamoAjax.php','GET', dataJson);
     countPrestamos.__ajax()
     .done(function(response){
@@ -298,9 +333,10 @@ $(document).ready(function(){
     });
   }
 
+  $('[data-toggle="tooltip"]').tooltip();
   $('#txt-cuota').val('');
   $('#txt-fecha-registro').val(hoy);
-
+  
   $('.question').click(function(){
     __sweetSimpe('Los campos con *','Los campos que tienen * son obligatorio llenarlos','info');
   });
@@ -309,31 +345,31 @@ $(document).ready(function(){
   $("#cmb-monto").change(function(){
      var op = $("#cmb-monto option:selected").val();
      var texto = $("#cmb-monto option:selected").text();
-
+  
     // $('#capa').html(op);
     //  console.log("Opcion: " + op);
     if(op != "0"){
       $('#info-monto').html(texto + span);
       monto = parseInt(texto);
-
+  
       calcularCuotasDiarias();
     }else{
       $('#info-monto').html('-');
       monto = 0;
     }
   });
-
+  
   // Actualizando dinámicamente el interes
   $('#cmb-interes').change(function(){
     var op = $('#cmb-interes option:selected').val();
     var texto = $('#cmb-interes option:selected').text();
     var sup = '<sup style="font-size: 20px">%</sup>';
-
+  
     if(op != "0"){
       $('#info-interes').html(texto + sup);
       interes = parseInt(texto);
       calcularCuotasDiarias();
-
+  
     }else{
       $('#info-interes').html('-');
       interes = 0;
@@ -343,32 +379,32 @@ $(document).ready(function(){
   $('#cmb-plazo').change(function(){
     var op = $('#cmb-plazo option:selected').val();
     var text = $('#cmb-plazo option:selected').text();
-
-
+  
+  
     if(op != "0"){
       $('#info-plazo').html(text);
       plazo = parseInt(text);
-
+  
       calcularCuotasDiarias();
     }else{
       plazo = 0;
     }
   });
-
+  
   $('#cmb-cliente').change(function(){
     var texto = $('#cmb-cliente option:selected').text();
     var op = $('#cmb-cliente option:selected').val();
-
+  
     if(op != "0"){
       $('#info-cliente').html(texto);
     }else{
       $('#info-cliente').html('');
     }
   });
-
+  
   $('#cmb-prestamo').change(function(){
     var op = $('#cmb-prestamo option:selected').val();
-
+  
     if(op != "0"){
       $('#info-prestamo').html(op);
     }
@@ -381,24 +417,24 @@ $(document).ready(function(){
     $('#txt-deuda-actual').val(saldoActual);
     $('#info-cuota-pagar').html('$ '+ pago);
     $('#info-saldo-restante').html('$' + saldoActual);
-
+  
     // console.log(deudaInicial - pago);
   });
-
+  
   $('#btn-limpiar').click(function(e){
     e.preventDefault();
     limpiarCampos();
   });
-
+  
   $('.preventDefault').submit(function(e){
     e.preventDefault();
    // var respuesta = form.children('.RespuestaAjax');
   });
- 
+
   $('#datos-cliente').click(function(e){
     e.preventDefault();
     // alert("Click en el boton");
-
+  
     var alerta = __sweetAlert('¿ Estás seguro?', 'Los datos del cliente se guardarán', 'warning')
     .then((result)=>{
       if(result.value){
@@ -413,8 +449,8 @@ $(document).ready(function(){
         var cli_lugar_cobro = $('#cliente-lugar-cobro').val();
         var cli_lugar_trabajo = $('#cliente-lugar-trabajo').val()
         var cli_fecha_registro = $('#txt-fecha-registro').val();
-
-
+  
+  
         var data = {
           type:'save',
           cliente:
@@ -435,10 +471,10 @@ $(document).ready(function(){
         };
         // dataJson = JSON.stringify(data);
         //console.log(datos);
-
+  
         if(validarFormCliente(data)){
           var ruta = 'ajax/ClienteDatosAjax.php';
-
+  
           var guardar = new Ajax(ruta,'POST', data);
           guardar.__ajax(ruta, 'POST', dataJson)
           .done(function(response){
@@ -458,15 +494,15 @@ $(document).ready(function(){
     });
     $('.preguntaAccion').html(alerta);
   });
-
+  
   $('#form-cliente-editar').submit(function(e){
     e.preventDefault();
     // alert("Click en el boton");
-
+  
     var alerta = __sweetAlert('¿ Estás seguro ?', 'Los datos del cliente se actualizarán', 'warning')
     .then((result)=>{
        if(result.value){
-
+  
         // let datos = $('#form-cliente').serialize();
         let cli_id = $('#cliente-id').val();
         let cli_cedula = $('#cliente-cedula').val();
@@ -479,7 +515,7 @@ $(document).ready(function(){
         let cli_lugar_cobro = $('#cliente-lugar-cobro').val();
         let cli_lugar_trabajo = $('#cliente-lugar-trabajo').val()
         // let cli_fecha_registro = $('#txt-fecha-registro').val();
-
+  
         var data = {
           type:'update',
           id:cli_id, 
@@ -501,12 +537,12 @@ $(document).ready(function(){
           };
         //  dataJson = JSON.stringify(data);
         // console.log(data);
-
+  
         if(validarFormCliente(data)){
           var ruta = 'ajax/ClienteDatosAjax.php';
           console.log(data);
           // console.log(dataJson);
-
+  
           var editar = new Ajax(ruta,'POST', data);
           editar.__ajax()
           .done(function(response){
@@ -517,7 +553,7 @@ $(document).ready(function(){
             if(response.result){
               $('#form-cliente-editar')[0].reset();
               tablaClientes();           
-
+  
               alerta = __sweetSimpe('Buen trabajo', 'El cliente se ha actualizado correctmente en el sistema', 'success');
               $('.error-datos').html(alerta);
             }
@@ -529,21 +565,22 @@ $(document).ready(function(){
      $('.preguntaAccion').html(alerta);
   });
 
+  
   $('#btn-prestamo-limpiar').click(function(e){
     e.preventDefault();
     $('#form-nuevo-prestamo')[0].reset();
     $('#cmb-buscador').val(0);
-    limpiarCampos();
+    limpiarCampos();    
   });
 
   $('#form-nuevo-prestamo').submit(function(e){
     e.preventDefault();
     let ruta = 'ajax/PrestamoAjax.php';
-
+  
     let alerta = __sweetAlert('¿ Estás seguro ?', 'Los datos préstamo de guardarán', 'warning')
     .then((result) =>{
         if(result.value){
-
+  
           let id_usuario = $('#id-Usuario').attr('value');
           let id_cliente = $('#cmb-buscador option:selected').val()
           let id_monto = $('#cmb-monto option:selected').val();
@@ -558,7 +595,7 @@ $(document).ready(function(){
           let terminos = $('#prestamo-termino')[0].checked;
           let acepta = $('#prestamo-termino').val()
           // alert(id_cliente);
-
+  
           let prestamoJSON = {
             type: 'insert',
             prestamo: {
@@ -580,10 +617,10 @@ $(document).ready(function(){
             result : 'true'
           };
           // console.log(prestamoJSON);
-
+  
           if(validarFormNuevoPrestamo(prestamoJSON)){
             console.log(prestamoJSON);
-
+  
             var insertarPrestamo = new Ajax(ruta,'POST', prestamoJSON);
             insertarPrestamo.__ajax()
             .done(function(response){
@@ -595,7 +632,7 @@ $(document).ready(function(){
                 $('#form-nuevo-prestamo')[0].reset();
                 limpiarCampos();
                 // console.log(response);
-             
+              
                 alerta = __sweetSimpe('Buen trabajo', 'El préstamo se ha registro correctamente en el sistema', 'success');
                 $('.error-datos').html(alerta);
               }
@@ -605,9 +642,7 @@ $(document).ready(function(){
         //  alert("Has cancelado la opcion"); 
         }
     });
-
   });
-
 });
 
 function cargarInfoCliente(id){
@@ -668,6 +703,32 @@ function visualizarDatos(id){
     if(response.result){
       formularioEditarCliente(response.cliente);
       //console.log(response.cliente);
+    }
+  });
+}
+
+function visualizarPrestamo(id){
+
+  let ruta =  'ajax/PrestamoAjax.php';
+  let dataJson = {
+    type: "one",
+    method: "get",
+    entidad: "prestamos",
+    id: id,
+    archivo: ruta
+  }
+
+  let listar = new Ajax(ruta, 'GET', dataJson);
+  listar.__ajax()
+  .done(function (response){
+    response = JSON.parse(response);
+    // console.log(response);
+    if(response.result){
+      console.log(response);
+      $('#editar-observacion-prestamo').val(response.prestamo.pres_observacion);
+      $idOption = "#editar-estatus-prestamo option[value = '"+response.prestamo.est_id+"']";
+      $($idOption).attr("selected",true);
+      $('#id-editar-prestamo').val(response.prestamo.id);
     }
   });
 }
@@ -739,6 +800,62 @@ function deletePrestamo(id){
   });
   $('.preguntaAccion').html(alerta);
 }
+
+function filtrarPrestamos(){
+  $("#filtrar-prestamo-estatus").change(function(){
+    let option = $('#filtrar-prestamo-estatus option:selected').val();
+    // alert($('select[id=ejemplo2]').val());
+    // $('#valor2').val($(this).val());
+    switch(option){
+
+      case '0':   //Todos
+          for(i = 0; i < arrayEstatus.length; i++){
+            let id = '.estatus-' + arrayEstatus[i];
+  
+            $(id).fadeIn(800);
+          }
+        break;
+
+      case '1':   //Inicio
+        for(i = 0; i < arrayEstatus.length; i++){
+          let id = '.estatus-' + arrayEstatus[i];
+
+          if(arrayEstatus[i] != 1){
+            $(id).fadeOut(600);
+          }else{
+            $(id).fadeIn(800);
+          }
+        }
+        break;
+      
+      case '2':   //Pagando
+          for(i = 0; i < arrayEstatus.length; i++){
+            let id = '.estatus-' + arrayEstatus[i];
+  
+            if(arrayEstatus[i] != 2){
+              $(id).fadeOut(600);
+            }else{
+              $(id).fadeIn(800);
+            }
+          }
+          break;
+
+      case '3':   //Finalizado
+          for(i = 0; i < arrayEstatus.length; i++){
+            let id = '.estatus-' + arrayEstatus[i];
+  
+            if(arrayEstatus[i] != 3){
+              $(id).fadeOut(600);
+            }else{
+              $(id).fadeIn(800);
+            }
+          }
+          break;
+    }
+  });
+
+}
+
 
 function ocultarPrestamo(id){
   let ruta = 'ajax/PrestamoAjax.php';
@@ -1036,3 +1153,4 @@ function onlyNumbers(){
     this.value = this.value.replace(/[^0-9]/g,'');
   });
 }
+

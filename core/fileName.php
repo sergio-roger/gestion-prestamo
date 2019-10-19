@@ -18,7 +18,7 @@ class FileName{
     private function listaBlanca(){
         $this->listaBlanca = [
             'clienteListar','clienteNuevo','cuotaNueva','prestamoNuevo','home','usuarioPerfil','prestamoListar',
-            'clienteInformacion','clientePrueba','prestamoOcultos'
+            'clienteInformacion','clientePrueba','prestamoOcultos', 'prestamoInformacion'
         ];
     }
     

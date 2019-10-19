@@ -2,6 +2,21 @@
 
 <div class="row preloader-loading d-none">
   <!-- <h1>Id: <?php //$idCliente?></h1> -->
+  <div class="col-12 mb-4">
+      <a href="<?= BASE?>prestamoListar" class="btn bg-teal color-palette">
+        <i class="fas fa-arrow-left"></i>
+      </a>
+      <a href="<?= BASE?>clienteNuevo" class="btn bg-maroon color-palette ml-2">
+      <i class="fas fa-user-plus"></i>
+      </a>
+      <a href="<?= BASE?>clienteListar" class="btn bg-maroon color-palette ml-2">
+        <i class="fas fa-users"></i>
+      </a>
+      <a href="<?= BASE?>prestamoNuevo" class="btn bg-purple color-palette ml-4">
+        <i class="fas fa-hand-holding-usd"></i>
+      </a>
+  </div>
+
   <div class="col-12 col-md-6">
       <div class="card">
         <div class="card-header">
@@ -163,6 +178,6 @@ $(function(){
         });
       }
 
-    });
+});
 
 </script>
