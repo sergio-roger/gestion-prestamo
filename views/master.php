@@ -15,11 +15,7 @@
 
   session_start(['name' => 'CE']);  
   
-  if($vw == 'login' || $vw == '404' || $vw == 'register'){
-    
-    // if(isset($_SESSION['token']) || isset($_SESSION['usuario'])){
-    //   Helper::redireccionar('home');
-    // }
+  if($vw == 'login' || $vw == '404' || $vw == 'register' || $vw == 'confirmar'){
     
     if($vw == 'login'){
       include_once 'views/contents/template/login.php';            //Aki va el include de login
@@ -27,6 +23,10 @@
     }
     elseif($vw == 'register'){
       include_once 'views/contents/template/register.php';        
+      include_once 'views/contents/template/scriptTemplate.php';    
+    }
+    elseif($vw == 'confirmar'){
+      include_once 'views/contents/template/confirmar.php';        
       include_once 'views/contents/template/scriptTemplate.php';    
     }
     elseif($vw == '404')

@@ -1,5 +1,16 @@
 
 <!-- Small boxes (Stat box) -->
+<div id="verificar-usuario" class="d-none">
+  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <strong>Necesita</strong> verificar su correo
+      <a href="#" class="ml-5" id="enviar-confirmacion">Enviar mensaje de confirmación</a>
+
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+</div>
+
 <div class="row aki empieza el home">
   <div class="col-lg-3 col-6">
     <!-- small box -->

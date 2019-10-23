@@ -25,5 +25,6 @@
 </div>
 <!-- ./wrapper -->
 
+<!-- Div para modals -->
 <?php
     include 'script.php';

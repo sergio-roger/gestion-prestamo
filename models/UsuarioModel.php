@@ -96,6 +96,13 @@ class UsuarioModel extends Model
         }
         return $respuesta;
     }
+
+    public function confirmarCorreo($id){
+        $sql = "UPDATE $this->tabla SET `usu_verificar` = 'S' where id = $id";
+        $respuesta = Model::ejecutarSQL($sql);
+
+        return $respuesta;
+    }
 }
 
 

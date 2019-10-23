@@ -86,7 +86,7 @@
 
                   <div class="mt-4">
                     <h6 class="text-danger">
-                      <strong>Información de Adicional</strong>
+                      <strong>Información Adicional</strong>
                     </h6>
                     <div class="d-flex justify-content-between">
                       <strong>Fecha de Registro</strong>

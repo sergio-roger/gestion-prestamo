@@ -44,7 +44,10 @@ class ViewModel
             $this->respuesta = 'register';
         }elseif($vista == 'index'){
             $this->respuesta = 'login';
-        }else{
+        }elseif($vista == 'confirmar'){
+            $this->respuesta = 'confirmar';
+        }
+        else{
             $this->respuesta = '404';
         }
         $contenido = $this->respuesta;

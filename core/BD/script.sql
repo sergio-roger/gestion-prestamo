@@ -23,6 +23,7 @@ CREATE TABLE IF NOT EXISTS usuarios(
     usu_usuario varchar(255) null,
     usu_clave varchar(255) null,
     usu_telefono varchar(12) null,
+    usu_verificar char(1) null,
     estado char null,
     CONSTRAINT FOREIGN KEY (rol_id) REFERENCES roles(id)
 )ENGINE=INNODB;

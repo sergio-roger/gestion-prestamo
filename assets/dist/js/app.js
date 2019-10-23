@@ -21,6 +21,8 @@ $(document).ready(function(){
     validarNumeros();
     onlyNumbers();
     filtrarPrestamos();
+    enviarMensajeConfirmacion();
+    obtenerPrestamoCliente();
   }
   
   function peticionesAjax(){
@@ -83,7 +85,12 @@ $(document).ready(function(){
           $('.usuario-sexo').html('Masculino');
         else
           $('.usuario-sexo').html('Femenino');
-  
+        
+        if(usuario.usu_verificar == '' || usuario.usu_verificar == null || usuario.usu_verificar != 'S'){
+          // let plantilla_verificar = ``;
+          $('#verificar-usuario').removeClass('d-none');
+        }
+
         datosPerfilForm(usuario);
       }
     });
@@ -856,7 +863,6 @@ function filtrarPrestamos(){
 
 }
 
-
 function ocultarPrestamo(id){
   let ruta = 'ajax/PrestamoAjax.php';
 
@@ -907,6 +913,48 @@ function mostrarPrestamo(id){
 
       $('#ep-'+ id).fadeOut(1200);
     });
+}
+
+
+//Funciones para las cuotas
+function obtenerPrestamoCliente(){
+    $('#cmb-cuota-cliente').change(function(){
+      let  opcion = $('#cmb-cuota-cliente option:selected').val();
+      console.log(opcion);
+    });
+}
+
+function enviarMensajeConfirmacion(){
+  $('#enviar-confirmacion').click(function(e){
+    e.preventDefault();
+    // let correo = $('#perfil-correo').val();
+    let id = $('#id-Usuario').attr("value");
+
+    let dataJson = {
+      type:'mensaje',
+      method:'post',
+      entidad:'usuario',
+      id: id
+    };
+
+    let ruta = 'ajax/ConfirmarCorreo.php';
+  
+    var confirmar = new Ajax(ruta,'POST', dataJson);
+    confirmar.__ajax(ruta, 'POST', dataJson)
+    .done(function(response){
+        // console.log(response);
+        response = JSON.parse(response);
+        
+        if(response.result){
+          alerta = __sweetSimpe('Correo de verificación', 'El correo de verificación ha sido enviado !', 'success');
+        }else{
+          alerta = __sweetSimpe('Error', 'Ha ocurrido un error !', 'error');          
+        }
+        $('.error-datos').html(alerta);
+    });
+
+  });
+
 }
 
 //Sweet Alert

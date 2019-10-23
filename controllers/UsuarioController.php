@@ -189,4 +189,11 @@ class UsuarioController
         $resultado = $this->usuarioModel->cerrarSesion($datos);
         return $resultado;
     }
+
+    public function confirmarCorreo($id){
+        $respuesta = $this->usuarioModel->confirmarCorreo($id);
+
+        if($respuesta)  return true; 
+        else            return false;
+    }
 }
