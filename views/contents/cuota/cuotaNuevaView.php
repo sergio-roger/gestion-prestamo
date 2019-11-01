@@ -10,7 +10,7 @@
     </div>
     <!-- /.card-header -->
     <!-- form start -->
-    <form role="form">
+    <form role="form" method="POST" id="form-nuevo-cuota" action="">
       <div class="card-body">
          
         <label class="text-info">Información</label>
@@ -49,11 +49,16 @@
           <!-- Préstamo -->
           <div class="col-12 col-sm-6">
             <div class="form-group">
-              <label>Préstamo</label>
+              <div class="row">
+                <div class="col-12 d-flex justify-content-between">
+                  <label >Préstamo</label>
+                  <label id="id-prestamo-cuota" class="mr-2 text-danger"></label>
+                </div>
+              </div>
               <select class="form-control select2 select2-hidden-accesible" style="width: 100%;"
-                id="cmb-prestamo"  data-select2-id="1" tabindex="-1" aria-hidden="true">
+                id="cmb-prestamo-cuota"  data-select2-id="1" tabindex="-1" aria-hidden="true">
                 <option value="0" selected>Elija el préstamo </option>
-                <option>$100</option>
+                <!-- <option>$100</option> -->
               </select>
             </div>
 
@@ -64,7 +69,7 @@
         <hr class="mt-0">
 
         <div class="row">
-          <div class="col-12 col-md-6">
+          <!-- <div class="col-12 col-md-6">
             <div class="form-group">
               <label for="fecha-estimada">Fecha Estimada</label>
               <div class="">
@@ -72,7 +77,7 @@
                 disabled id="txt-fecha-estimada"val="20/09/2019">
               </div>
               </div>
-          </div>
+          </div> -->
 
           <div class="col-12 col-md-6">
             <div class="form-group">
@@ -82,39 +87,33 @@
                 </div>
               </div>
           </div>    
-        </div>
 
-        <div class="row">
           <div class="col-12 col-md-6">
               <div class="form-group">
-                <label for="cuota">Valor cuota</label>
+                <label for="cuota">Valor cuota $</label>
                 <div class="">
                   <input type="text" class="form-control" name="cuota" 
-                  disabled id="txt-cuota-valor" placeholder="$4">
+                  disabled id="txt-cuota-valor">
                 </div>
                 </div>
             </div>
 
             <div class="col-12 col-md-6">
               <div class="form-group">
-                  <label for="cuota-pago">Valor a Pagar</label>
+                  <label for="cuota-pago">Valor a Pagar $</label>
                   <div class="">
                     <input type="number" class="form-control" name="cuota-pago" id="txt-cuota-pago"
                     placeholder="$5">
                   </div>
                 </div>
             </div>
-        </div>
-
-        <div class="row">
+ 
           <div class="col-12 col-sm-6">
              <!-- select -->
             <div class="form-group">
               <label>Estatus</label>
-              <select class="form-control" id="cmb-interes">
+              <select class="form-control comboEstatus" id="cmb-status-cuota">
                 <option value="0" selected>Seleccione una opcion</option>
-                <option>Pagado</option>
-                <option>Abonado</option>
               </select>
             </div>
           </div>
@@ -125,20 +124,20 @@
         <div class="row">              
           <div class="col-12 col-md-6">
               <div class="form-group">
-                <label for="deuda-inicial">Deuda Inicial</label>
+                <label for="deuda-inicial">Deuda Actual $</label>
                 <div class="">
                   <input type="number" class="form-control" name="deuda-inicial" 
-                  disabled id="txt-deuda-inicial" value="100">
+                  disabled id="txt-deuda-inicial" value="0">
                 </div>
                 </div>
             </div>
 
             <div class="col-12 col-md-6">
               <div class="form-group">
-                  <label for="deuda-actual">Saldo Actual</label>
+                  <label for="deuda-actual">Saldo Restante $</label>
                   <div class="">
                     <input type="number" class="form-control" name="deuda-actual" id="txt-deuda-actual"
-                    placeholder="$5" disabled>
+                    placeholder="$0" disabled>
                   </div>
                 </div>
             </div>    
@@ -148,12 +147,16 @@
 
       <div class="card-footer">
         <button type="submit" class="btn btn-success">Registrar Cuota</button>
-        <button class="btn btn-dark" id="btn-limpiar">Limpiar campos</button>
+        <button class="btn btn-dark" id="btn-limpiar-cuota">Limpiar campos</button>
       </div>
+
+      <div class="error-datos"></div>
     </form>
   </div>
   <!-- /.card -->
 </div>
+
+<!-- Card de Información -->
 
 <div class="col-md-3">
   <div class="row">
@@ -166,7 +169,21 @@
           <p>Cliente</p>
         </div>
         <div class="icon">
-          <i class="ion ion-bag"></i>
+          <i class="fas fa-user fa-lg"></i>
+        </div>
+      </div>
+    </div>
+
+     <!-- ./col -->
+     <div class="col-12">
+      <!-- small box -->
+      <div class="small-box bg-success">
+        <div class="inner">
+          <h3 id="info-prestamo-inicial">-</h3>
+          <p>Deuda Inicial</p>
+        </div>
+        <div class="icon">
+          <i class="fas fa-hand-holding-usd"></i>
         </div>
       </div>
     </div>
@@ -174,13 +191,13 @@
     <!-- ./col -->
     <div class="col-12">
       <!-- small box -->
-      <div class="small-box bg-success">
+      <div class="small-box bg-warning">
         <div class="inner">
           <h3 id="info-prestamo">-</h3>
-          <p>Préstamo Inicial</p>
+          <p>Deuda Actual</p>
         </div>
         <div class="icon">
-          <i class="ion ion-stats-bars"></i>
+          <i class="fas fa-dollar-sign"></i>
         </div>
       </div>
     </div>
@@ -195,7 +212,7 @@
           <p>Valor a pagar</p>
         </div>
         <div class="icon">
-          <i class="ion ion-pie-graph"></i>
+          <i class="fas fa-money-check-alt"></i>
         </div>
       </div>
     </div>
@@ -210,7 +227,7 @@
           <p>Saldo Restante</p>
         </div>
         <div class="icon">
-          <i class="ion ion-pie-graph"></i>
+         <i class="fas fa-file-invoice-dollar"></i>
         </div>
       </div>
     </div>

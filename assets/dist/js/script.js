@@ -5,9 +5,12 @@ $(function(){
     theme: 'bootstrap4'
   });
   
-  $('#cmb-cliente').select2({
+  $('#cmb-cuota-cliente').select2({
     theme: 'bootstrap4'
   });
  
+  $('#cmb-listar-prestamos-cuotas').select2({
+    theme: 'bootstrap4'
+  });
 });
 

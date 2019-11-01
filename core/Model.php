@@ -43,6 +43,15 @@ class Model{
         return $stmt;
     }
 
+    protected function byCampo($id, $campo = 'id', $tabla){
+        $sql = "SELECT $campo FROM $tabla WHERE id = $id AND estado = 'A'";
+        $stmt = $this->Conectar()->prepare($sql);
+        $stmt->execute();
+
+        // return ($respuesta) ? $stmt : false;
+        return $stmt;
+    }
+
     protected function all(){
         //ORDER BY cli_apellidos ASC
         $sql = "SELECT * FROM $this->tabla WHERE estado = 'A'";
@@ -59,7 +68,9 @@ class Model{
     protected function count(){
         $sql = "SELECT COUNT(*) as cantidad FROM $this->tabla WHERE estado = 'A'";
         $stmt = $this->Conectar()->prepare($sql);
-        $stmt->execute();
+        $respuesta = $stmt->execute();
+
+        // return ($respuesta) ? $stmt : false;
         return $stmt;
     }
 

@@ -88,6 +88,29 @@ class PrestamoModel extends Model{
         return $stmt;
     }
 
+    public function getPrestamoByCliente($idCliente){
+        $sql = "CALL sp_getPrestamoCliente($idCliente)";
+        $stmt = Model::ejecutarSQL($sql);
+
+        if($stmt->rowCount() >= 1){
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        }else{
+            return false;
+        }
+    }
+
+    public function UpdatePagado($id, $valor){
+        $sql ="UPDATE prestamos SET pres_pagado = $valor WHERE id = $id";
+        $stmt = Model::ejecutarSQL($sql);
+        return true;
+    }
+
+    public function updateEstatus($id, $valor){
+        $sql ="UPDATE prestamos SET est_id = $valor WHERE id = $id";
+        $stmt = Model::ejecutarSQL($sql);
+        return true;
+    }
+
     public function count(){
         return Model::count();
     }

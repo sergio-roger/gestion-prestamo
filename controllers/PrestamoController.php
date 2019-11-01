@@ -63,7 +63,15 @@ class PrestamoController{
         // var_dump($prestamo);
     }
 
-   public function cleanArray($data){
+    public function updatePagado($id, $valor){
+        return $this->prestamoModel->UpdatePagado($id, $valor);
+    }
+
+    public function updateEstatus($id, $valor){
+        return $this->prestamoModel->updateEstatus($id, $valor);
+    }
+
+    public function cleanArray($data){
 
        if(is_array($data)){
             $data['id_usuario'] = $this->prestamoModel->cleanString($data['id_usuario']);
@@ -81,17 +89,17 @@ class PrestamoController{
        }
 
        return $data;
-   }
+    }
 
-   public function all(){
+    public function all(){
        return $this->prestamoModel->all();
-   }
+    }
 
-   public function getAllPersonalizado(){
+    public function getAllPersonalizado(){
        $stmt =  $this->prestamoModel->getAllPersonalizado();
        //    var_dump($stmt->fetch(PDO::FETCH_ASSOC));
        return $stmt;
-   }
+    }
 
    public function getPrestamosOcultos(){
         $stmt = $this->prestamoModel->getPrestamosOcultos();
@@ -102,6 +110,10 @@ class PrestamoController{
        return $this->prestamoModel->count();
    }
    
+   public function getPrestamoByCliente($idCliente){
+        return $this->prestamoModel->getPrestamoByCliente($idCliente);
+   }
+
    public function delete($id){
     $respuesta = $this->prestamoModel->delete($id); 
     

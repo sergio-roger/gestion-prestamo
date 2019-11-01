@@ -45,7 +45,7 @@
         </div>
         <!-- /.card-header -->
         <!-- form start -->
-        <form role="form" class="preventDefault" action="" method="POST" id="form-cliente accept-charset="utf-8""
+        <form role="form" class="preventDefault" action="" method="POST" id="form-cliente" accept-charset="utf-8"
             enctype="multipart/form-data">
             <div class="card-body">
                 <div class="form-group">

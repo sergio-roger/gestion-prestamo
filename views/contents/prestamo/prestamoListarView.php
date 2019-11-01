@@ -104,8 +104,8 @@
                 </select>
             </div>
 
-            <div class="mt-3">
-                <button type="submit" class="btn btn-dark" id="btn-cambios-prestamo">
+            <div class="mt-3" id="btn-modal-actualizar">
+                <button type="submit" class="btn btn-dark d-none" id="btn-cambios-prestamo">
                     <i class="fas fa-edit blanco ml-2"></i>  
                     Actualizar
                 </button>
@@ -152,22 +152,28 @@
                     let bgColor = '';
                     let bgGradientColor = '';
                     let textColor = '';
-
+                    let display = '';
+                    
                     switch(response.prestamos[i].est_id){
                         case '1':   //Estatus 1 --> Prestamo iniciado
                             bgColor = 'card-success';
                             bgGradientColor = 'bg-gradient-success';
                             textColor = 'text-white';
+                            display = ''
                         break;
+
                         case '2':   //Estatus 2 -> Pagando préstamo
                             bgColor = 'card-primary';
                             bgGradientColor = 'bg-gradient-primary';
                             textColor = 'text-white';
+                            display = ''                       
                         break;
+
                         case '3':   //Estatus 3 -> Finalizado préstamo
                             bgColor = 'card-danger';
                             bgGradientColor = 'bg-gradient-danger';
                             textColor = 'text-white';
+                            display = 'd-none'                           
                         break;
                     }
 
@@ -226,7 +232,7 @@
                                         <i class="fas fa-eye-slash"></i>
                                     </button>
 
-                                    <button class="btn btn-outline-warning" data-toggle="modal" data-target="#editarPrestamoModal"
+                                    <button class="btn btn-outline-warning ${display}" data-toggle="modal" data-target="#editarPrestamoModal"
                                     onclick="visualizarPrestamo(${response.prestamos[i].id})">
                                      <i class="fas fa-edit"></i>
                                     </button>
@@ -250,6 +256,7 @@
                     total = total + plantilla;
                     // console.log(response.prestamos[i]);
                     }
+
                     $('#listarTotalPrestamos').html(total);
                 }
             })

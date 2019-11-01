@@ -5,8 +5,7 @@ class FileName{
     private $listaBlanca;
     private $carpetas;
     
-    public function __construct()
-    {
+    public function __construct(){
         $this->listaBlanca = [];
         $this->carpetas = [];
 
@@ -18,7 +17,7 @@ class FileName{
     private function listaBlanca(){
         $this->listaBlanca = [
             'clienteListar','clienteNuevo','cuotaNueva','prestamoNuevo','home','usuarioPerfil','prestamoListar',
-            'clienteInformacion','clientePrueba','prestamoOcultos', 'prestamoInformacion'
+            'clienteInformacion','clientePrueba','prestamoOcultos', 'prestamoInformacion','cuotaListar'
         ];
     }
     

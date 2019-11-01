@@ -22,7 +22,7 @@ $(document).ready(function(){
     onlyNumbers();
     filtrarPrestamos();
     enviarMensajeConfirmacion();
-    obtenerPrestamoCliente();
+    limparNuevaCuota();
   }
   
   function peticionesAjax(){
@@ -38,9 +38,12 @@ $(document).ready(function(){
         _6getPlazos: '6.- Carga de plazos',
         _7getEstatus: '7.- Carga de estatus',
         // _8listarPrestamos: '8.- listar prestamos',
-        _9countPrestamos: '9.- Contar préstamos' 
+        _9countPrestamos: '8.- Contar préstamos', 
+        _10obtenerPrestamoCliente: '9.- obtener prestamo según id',
+        _11comboPrestamosID: '10.- Obtiene todos los pestamos en un combo'
       }
     };
+
     datosUsuario();
     listarClientes();
     cargarClientes();
@@ -52,6 +55,8 @@ $(document).ready(function(){
     getEstatusFiltro();
     // listaPrestamos();
     countPrestamo();
+    obtenerPrestamoCliente();
+    comboPrestamosID();
   
     console.log(peticiones);
   }
@@ -114,6 +119,7 @@ $(document).ready(function(){
         //console.log(response);
         var comboCliente = '<option value="0">Seleccione un cliente<option>'; 
         var tablaCliente;
+
         for(var i in response.clientes){
         //   console.log(response.clientes[i]);
           var nombres = response.clientes[i].cli_apellidos + ' ' + response.clientes[i].cli_nombres;
@@ -200,17 +206,48 @@ $(document).ready(function(){
     montos.__ajax()
     .done(function(response){
       response = JSON.parse(response);
-      var option = '<option value="0">Seleccione una opcion</option> ';
+      let option = '<option value="0">Seleccione una opcion</option> ';
   
       if(response.result){
         for (var i in response.montos)
           option += `<option value="${response.montos[i].id}">${response.montos[i].mon_cantidad}</option>`;
       }
+
       $('.comboMontos').html(option);
+
     });
-  
   }
   
+  function comboPrestamosID(){
+
+    let ruta = 'ajax/PrestamoAjax.php'; 
+    let prestamoJSON = {
+      type:'all',
+      method:'get',
+      entidad:'prestamos'
+    };
+
+    let insertarPrestamo = new Ajax(ruta,'GET', prestamoJSON);
+    
+    insertarPrestamo.__ajax()
+    .done(function(response){
+      // //La strinjson convertir a formato JSON
+      response = JSON.parse(response);
+      
+      if(response.result){
+        // console.log(response);
+
+        let option = '<option>Seleccione una opción</option>';
+        for(let i in response.prestamos){
+            if(response.prestamos[i].est_id != 1){
+              option += `<option value="${response.prestamos[i].id}">ID - ${response.prestamos[i].id}</option>`;
+            }
+        }
+        $('.llenaComboPrestamoID').html(option);
+      }
+    });
+  }
+
   function getIntereses(){
     let ruta = 'ajax/LlenarCombosAjax.php';
   
@@ -398,9 +435,9 @@ $(document).ready(function(){
     }
   });
   
-  $('#cmb-cliente').change(function(){
-    var texto = $('#cmb-cliente option:selected').text();
-    var op = $('#cmb-cliente option:selected').val();
+  $('#cmb-cuota-cliente').change(function(){
+    var texto = $('#cmb-cuota-cliente option:selected').text();
+    var op = $('#cmb-cuota-cliente option:selected').val();
   
     if(op != "0"){
       $('#info-cliente').html(texto);
@@ -415,6 +452,15 @@ $(document).ready(function(){
     if(op != "0"){
       $('#info-prestamo').html(op);
     }
+  });
+
+  $('#cmb-listar-prestamos-cuotas').change(function(){
+    // let texto = $('#cmb-listar-prestamos-cuotas option:selected').text();
+    let id = $('#cmb-listar-prestamos-cuotas option:selected').val();
+    
+    getInfoPrestamo(id);
+    tablaCuotasDetalladas(id);
+
   });
 
   $('#txt-cuota-pago').bind('input', function(){
@@ -571,7 +617,6 @@ $(document).ready(function(){
      });
      $('.preguntaAccion').html(alerta);
   });
-
   
   $('#btn-prestamo-limpiar').click(function(e){
     e.preventDefault();
@@ -650,7 +695,97 @@ $(document).ready(function(){
         }
     });
   });
+
+  $('#form-nuevo-cuota').submit(function(e){
+    e.preventDefault();
+    let ruta = 'ajax/CuotaAjax.php';
+
+    let id_usuario = $('#id-Usuario').attr('value');
+    let fechaRegistro = $('#txt-fecha-registro').val();
+    let horaRegistro = $('#txt-hora-registro').val();
+    let id_cliente = $('#cmb-cuota-cliente option:selected').val();
+    let id_prestamo = $('#cmb-prestamo-cuota option:selected').val();
+    let fechaPago = $('#txt-fecha-pago').val();
+    let valorPagar = $('#txt-cuota-pago').val();
+    let id_estatus = $('#cmb-status-cuota option:selected').val();
+    let saldoActual = $('#txt-deuda-inicial').val();
+    let saldoRestante = $('#txt-deuda-actual').val();
+
+    let cuotaJson = {
+      type: 'insert',
+      cuota:{
+        usu_id: parseInt(id_usuario),
+        cuo_fecha_registro: fechaRegistro,
+        cuo_hora_registro: horaRegistro,
+        cli_id: parseInt(id_cliente),
+        pres_id: parseInt(id_prestamo),
+        cuo_fecha_pago: fechaPago,
+        cuo_valor_pago: valorPagar,
+        est_id: parseInt(id_estatus),
+        cuo_saldo_inicial: parseFloat(saldoActual),
+        cuo_saldo_actual: parseFloat(saldoRestante),
+        cuo_cuota_numero: 1,
+        estado: 'A'
+      }
+    };
+
+    let alerta = __sweetAlert('¿ Estás seguro ?', 'La cuota ingresada se registrará en el sistema', 'warning')
+    .then((result) =>{
+      if(result.value){
+        
+        if(validarFormNuevaCuota(cuotaJson)){
+          // console.log(cuotaJson);
+          let insertarCuota = new Ajax(ruta,'POST', cuotaJson);
+          insertarCuota.__ajax()
+          .done(function(response){
+            // //La strinjson convertir a formato JSON
+            response = JSON.parse(response);
+            
+            if(response.result){
+              // $('#form-nuevo-prestamo')[0].reset();
+              console.log(response);
+              cargarClientes();
+              auxLimpiarCuota();
+              // // console.log(response);
+            
+              
+              if(response.prestamoTerminado){
+                alerta = __sweetSimpe('Felicidades', 'El cliente ha terminado de pagar el préstamo', 'success');                
+              }else{
+                alerta = __sweetSimpe('Buen trabajo', 'La cuota se ha registro correctamente en el sistema', 'success');
+             }
+              
+              $('.error-datos').html(alerta);
+            }
+          });
+
+        }
+      }
+    });
+  });
+
+  function limparNuevaCuota(){
+    $('#btn-limpiar-cuota').click(function(e){
+      e.preventDefault();
+      cargarClientes();
+      auxLimpiarCuota();
+    });
+  }
+  
 });
+
+function auxLimpiarCuota(){
+  $('#form-nuevo-cuota')[0].reset();
+  $('#cmb-prestamo-cuota').html('<option value="0">Elija el préstamo<option>');
+  $('#id-prestamo-cuota').html('');
+  $('#info-prestamo-inicial').html('-');
+  $('#info-prestamo').html('-');
+  $('#info-cuota-pagar').html('-');
+  $('#info-saldo-restante').html('-');
+  $('#info-cliente').html('-');
+
+  $('#txt-fecha-registro').val(obtenerFecha());
+}
 
 function cargarInfoCliente(id){
   console.log("Id préstamo: " + id);
@@ -689,6 +824,78 @@ function tablaClientes(){
             }
   });
   return tb;
+}
+
+function getInfoPrestamo(id){
+  let ruta = 'ajax/PrestamoAjax.php';
+  let dataJson = {
+    type:"onePrestamo",
+    method:"get",
+    entidad:"prestamo",
+    id: id,
+    archivo: ruta
+  };
+
+  $.ajax({
+    'method':'GET',
+    'url': ruta,
+    'data': { 'data': JSON.stringify(dataJson)}
+  })
+  .done(function(response){
+    response = JSON.parse(response);
+
+    if(response.result){
+      // console.log(response);
+      let prestamo = response.prestamo;
+      let fechaInicio = formateandoFecha(prestamo.pres_fecha_inicio);
+      let fechafin = formateandoFecha(prestamo.pres_fecha_fin);
+
+      $('#clv-cliente').html(prestamo.nombres);
+      $('#clv-fechaInicio').html(fechaInicio);
+      $('#clv-fechaFin').html(fechafin);
+      $('#clv-monto').html(prestamo.monto);
+      $('#clv-interes').html(prestamo.interes);
+      $('#clv-estatus').html(prestamo.det_estatus);
+      $('#clv-total').html(prestamo.pres_total);
+    }
+  })
+  .fail(function(){
+    console.log('error en ajax GET getInfoPrestamo');
+  })
+  .always(function(){
+  });
+ }
+
+function tablaCuotasDetalladas(idPrestamo){
+  // console.log("Realizar petición ajax: "+ idPrestamo);
+  let ruta = 'ajax/CuotaAjax.php';
+
+  let cuotaJson = {
+    type: 'getCuotasPrestamo',
+    idPrestamo: idPrestamo
+  };
+
+  let getCuotasPrestamo = new Ajax(ruta,'GET', cuotaJson);
+  getCuotasPrestamo.__ajax()
+  .done(function(response){
+    response = JSON.parse(response);
+    
+    if(response.result){
+      // console.log(response);
+      let tbody = '';
+
+      for(let i in response.cuotas){
+        tbody += `<tr> <td class="text-center">${parseInt(i) + parseInt(1)}</td>
+            <td class="text-center">${response.cuotas[i].cuo_fecha_pago}</td>
+            <td class="text-center">${response.cuotas[i].cuo_valor_pago}</td>
+            <td class="text-center">${response.cuotas[i].cuo_saldo_inicial}</td>
+            <td class="text-center">${response.cuotas[i].cuo_saldo_actual}</td>
+        <tr>`;
+      }
+   
+      $('#tabla-body-cuotas').html(tbody);
+    }
+  });
 }
 
 function visualizarDatos(id){
@@ -915,12 +1122,57 @@ function mostrarPrestamo(id){
     });
 }
 
-
 //Funciones para las cuotas
 function obtenerPrestamoCliente(){
     $('#cmb-cuota-cliente').change(function(){
-      let  opcion = $('#cmb-cuota-cliente option:selected').val();
-      console.log(opcion);
+      let  idCliente = $('#cmb-cuota-cliente option:selected').val();
+
+      dataJson = {
+        type:"byClient",
+        method:"get",
+        entidad:"prestamos",
+        idCliente: idCliente
+      };
+    
+      //dataJson = JSON.stringify(dataJson);
+      let allClientes = new Ajax('ajax/PrestamoAjax.php','GET', dataJson);
+      
+      allClientes.__ajax()
+      .done(function(response){
+        response = JSON.parse(response);
+        let comboPrestamo;
+
+        if(response.result){
+          prestamo = response.prestamo;
+          let id_prest, valorCuota, deudaInicio, pTotal;
+
+          if(prestamo){
+            id_prest = 'ID - ' + prestamo.id;
+            valorCuota = prestamo.pres_cuota;
+            pTotal = '$ ' + prestamo.pres_total;
+            // Calculo de la deuda vigente o actual
+            deudaInicio = parseFloat(prestamo.pres_total) - parseFloat(prestamo.pres_pagado); 
+            comboPrestamo += `<option value="${prestamo.id}"> ${prestamo.monto}</option>`;
+          }else{
+            comboPrestamo = '<option value="0">No tiene préstamo<option>';
+            id_prest = '';
+            valorCuota = '';
+            deudaInicio = '';
+            pTotal = '';
+          }
+          
+          //$('.prestamo-clientes').html(tablaCliente);
+          $('#txt-cuota-valor').val(valorCuota);
+          $('#txt-deuda-inicial').val(deudaInicio);
+
+          $('#info-prestamo').html('$ ' + deudaInicio);
+          $('#info-prestamo-inicial').html(pTotal);
+          $('#id-prestamo-cuota').html(id_prest);
+          $('#cmb-prestamo-cuota').html(comboPrestamo);
+
+          console.log(response);
+        }
+      });
     });
 }
 
@@ -1056,6 +1308,44 @@ function validarFormNuevoPrestamo(data){
     $('.error-datos').html(alerta);
     return false;
   }
+  return true;
+}
+
+function validarFormNuevaCuota(data){
+  let alerta;
+  let cuota = data.cuota;
+  
+  if(cuota.cli_id == '' || cuota.cli_id <= 0){
+    alerta = __sweetSimpe('Ups falta cliente', 'Necesitas seleccionar un cliente para continuar','error');
+    $('.error-datos').html(alerta);
+    return false;
+  }
+  else if(cuota.pres_id == '' || cuota.pres_id <= 0){
+    alerta = __sweetSimpe('Ups falta el préstamo', 'Necesitas seleccionar un préstamo del cliente para continuar','error');
+    $('.error-datos').html(alerta);
+    return false;
+  }
+  else if(cuota.cuo_fecha_pago == ''){
+    alerta = __sweetSimpe('Ups falta fecha', 'Necesitas ingresar una fecha de pago para la cuota','error');
+    $('.error-datos').html(alerta);
+    return false;
+  }
+  else if(cuota.cuo_valor_pago == '' || cuota.cuo_valor_pago <= 0){
+    alerta = __sweetSimpe('Ups falta valor a pagar', 'Necesitas ingresar una cantidad en valor a pagar','error');
+    $('.error-datos').html(alerta);
+    return false;
+  }
+  else if(cuota.est_id == '' || cuota.est_id <= 0){
+    alerta = __sweetSimpe('Ups falta el estatus', 'Necesitas seleccionar el estatus de la cuota','error');
+    $('.error-datos').html(alerta);
+    return false;
+  }
+  else if(cuota.cuo_saldo_actual < 0 ){
+    alerta = __sweetSimpe('Ups cantidad excedida', 'El valor de la cuota no puede exceder la deuda actual','error');
+    $('.error-datos').html(alerta);
+    return false;
+  }
+
   return true;
 }
 
@@ -1202,3 +1492,8 @@ function onlyNumbers(){
   });
 }
 
+function formateandoFecha(fecha){
+  let array = fecha.split('-');
+  let formato = array[2] + '/' + array[1] + '/' + array[0];
+  return formato;
+}

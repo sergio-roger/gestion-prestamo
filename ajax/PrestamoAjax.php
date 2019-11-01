@@ -79,6 +79,10 @@ elseif($method == 'GET'){
             $response['prestamo'] = $prestamo->fetch(PDO::FETCH_ASSOC);
             // $response['text'] = 'Llamar al procedimiento almacenado';
         }
+        elseif($data->{'type'} == 'byClient'){
+            $id = $data->{'idCliente'};
+            $response['prestamo'] = $prestamoController->getPrestamoByCliente($id);
+        }
     }
 }
 elseif($method == 'PUT'){
@@ -96,7 +100,6 @@ elseif($method == 'PUT'){
                'id_estatus' => $data['id_estatus'],
                'id' => $data['id']
            ];
-           
            //Función para actualizar los datos del préstamo
            $response['estado'] = $prestamoController->updateShort($update);
         } 

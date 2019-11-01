@@ -116,6 +116,31 @@
                   </a>
                 </li> 
             </ul>
+            <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a id="btn-cuotaNueva" href="<?= BASE?>cuotaListar" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Ver todas las Cuotas</p>
+                  </a>
+                </li> 
+            </ul>
+          </li>
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-table"></i>
+              <p>
+                Abonos
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="../tables/simple.html" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Nuevo Abono</p>
+                </a>
+              </li>      
+            </ul>
           </li>
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
@@ -130,35 +155,6 @@
                 <a href="#" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Elementos Generales</p>
-                </a>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-item has-treeview">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-table"></i>
-              <p>
-                Tables
-                <i class="fas fa-angle-left right"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="../tables/simple.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Simple Tables</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="../tables/data.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>DataTables</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="../tables/jsgrid.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>jsGrid</p>
                 </a>
               </li>
             </ul>
