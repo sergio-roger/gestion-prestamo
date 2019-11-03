@@ -40,7 +40,8 @@ $(document).ready(function(){
         // _8listarPrestamos: '8.- listar prestamos',
         _9countPrestamos: '8.- Contar préstamos', 
         _10obtenerPrestamoCliente: '9.- obtener prestamo según id',
-        _11comboPrestamosID: '10.- Obtiene todos los pestamos en un combo'
+        _11comboPrestamosID: '10.- Obtiene todos los pestamos en un combo',
+        _12getPrestamosLimit: '11 getPrestamosRecientes con un límite'
       }
     };
 
@@ -57,7 +58,8 @@ $(document).ready(function(){
     countPrestamo();
     obtenerPrestamoCliente();
     comboPrestamosID();
-  
+    getPrestamosRecientes();
+
     console.log(peticiones);
   }
 
@@ -237,7 +239,7 @@ $(document).ready(function(){
       if(response.result){
         // console.log(response);
 
-        let option = '<option>Seleccione una opción</option>';
+        let option = '<option value="0">Seleccione una opción</option>';
         for(let i in response.prestamos){
             if(response.prestamos[i].est_id != 1){
               option += `<option value="${response.prestamos[i].id}">ID - ${response.prestamos[i].id}</option>`;
@@ -457,12 +459,38 @@ $(document).ready(function(){
   $('#cmb-listar-prestamos-cuotas').change(function(){
     // let texto = $('#cmb-listar-prestamos-cuotas option:selected').text();
     let id = $('#cmb-listar-prestamos-cuotas option:selected').val();
-    
-    getInfoPrestamo(id);
-    tablaCuotasDetalladas(id);
 
+    if(parseInt(id) == 0){
+      subLimpiarCuotaDetallada();
+    }else{
+      getInfoPrestamo(id);
+      tablaCuotasDetalladas(id);
+    }
   });
 
+  function subLimpiarCuotaDetallada(){
+    $('#tabla-body-cuotas').html('<tr></tr>');
+    $('#clv-cliente').html('');
+    $('#clv-fechaInicio').html('');
+    $('#clv-fechaFin').html('');
+    $('#clv-monto').html('');
+    $('#clv-interes').html('');
+    $('#clv-estatus').html('');
+    $('#clv-total').html('');
+  }
+
+  $('#cmb-listar-prestamos-cuotas-1').change(function(){
+    // let texto = $('#cmb-listar-prestamos-cuotas option:selected').text();
+    let id = $('#cmb-listar-prestamos-cuotas-1 option:selected').val();
+
+    if(parseInt(id) == 0){
+      // subLimpiarCuotaDetallada();
+    }else{
+      getInfoPrestamoCompacto(id);
+      cuadrosCuotasCompactadas(id);
+    }
+  });
+  
   $('#txt-cuota-pago').bind('input', function(){
     var pago = $(this).val();
     var deudaInicial = $('#txt-deuda-inicial').val();
@@ -764,6 +792,15 @@ $(document).ready(function(){
     });
   });
 
+  $('#limpiar-cuota-detallada').click(function(){
+    let id = $('#cmb-listar-prestamos-cuotas option:selected').val();
+
+    if(parseInt(id) == 0){
+    }else{
+      subLimpiarCuotaDetallada();
+    }
+  });
+
   function limparNuevaCuota(){
     $('#btn-limpiar-cuota').click(function(e){
       e.preventDefault();
@@ -853,10 +890,10 @@ function getInfoPrestamo(id){
       $('#clv-cliente').html(prestamo.nombres);
       $('#clv-fechaInicio').html(fechaInicio);
       $('#clv-fechaFin').html(fechafin);
-      $('#clv-monto').html(prestamo.monto);
-      $('#clv-interes').html(prestamo.interes);
+      $('#clv-monto').html('$ ' + prestamo.monto);
+      $('#clv-interes').html(prestamo.interes + ' %');
       $('#clv-estatus').html(prestamo.det_estatus);
-      $('#clv-total').html(prestamo.pres_total);
+      $('#clv-total').html('$ ' + prestamo.pres_total);
     }
   })
   .fail(function(){
@@ -865,6 +902,42 @@ function getInfoPrestamo(id){
   .always(function(){
   });
  }
+
+function getInfoPrestamoCompacto(idPrestamo){
+let ruta = 'ajax/PrestamoAjax.php';
+let dataJson = {
+  type:"onePrestamo",
+  method:"get",
+  entidad:"prestamo",
+  id: idPrestamo,
+  archivo: ruta
+};
+
+$.ajax({
+  'method':'GET',
+  'url': ruta,
+  'data': { 'data': JSON.stringify(dataJson)}
+})
+.done(function(response){
+  response = JSON.parse(response);
+
+  if(response.result){
+    let prestamo = response.prestamo;
+    let restante = parseFloat(prestamo.pres_total) - parseFloat(prestamo.pres_pagado)
+    // let fechaInicio = formateandoFecha(prestamo.pres_fecha_inicio);
+
+    $('#compactada-cliente').html(prestamo.nombres);
+    $('#compactada-monto').html(prestamo.monto);
+    $('#compactada-restante').html(restante);
+    
+  }
+})
+.fail(function(){
+  console.log('error en ajax GET getInfoPrestamoCompacto');
+})
+.always(function(){
+});
+}
 
 function tablaCuotasDetalladas(idPrestamo){
   // console.log("Realizar petición ajax: "+ idPrestamo);
@@ -894,6 +967,72 @@ function tablaCuotasDetalladas(idPrestamo){
       }
    
       $('#tabla-body-cuotas').html(tbody);
+    }
+  });
+}
+
+function cuadrosCuotasCompactadas(idPrestamo){
+  // console.log("Realizar petición ajax: "+ idPrestamo);
+  let ruta = 'ajax/CuotaAjax.php';
+
+  let cuotaJson = {
+    type: 'getCuotasPrestamo',
+    idPrestamo: idPrestamo
+  };
+
+  let getCuotasPrestamo = new Ajax(ruta,'GET', cuotaJson);
+  getCuotasPrestamo.__ajax()
+  .done(function(response){
+    response = JSON.parse(response);
+    
+    if(response.result){
+      // console.log(response);
+      let ultimaCuota = response.cuotas[response.cuotas.length -1]
+      let fechaCuota = formateandoFecha(ultimaCuota.cuo_fecha_registro);
+      let bodyCompactada = '';
+      for(let i in response.cuotas){
+        bodyCompactada += `<div class="col-2 d-flex flex-column justify-content-center mb-1 pb-2">
+        <span class="ml-1">${parseInt(i) + parseInt(1)}</span>
+          <i class="fas fa-check-square fa-lg"></i>
+        </div> `;
+      }
+   
+      $('#box-cuotasCompactadas').html(bodyCompactada);
+      $('#compactada-cantidad-cuotas').html(response.cuotas.length);
+      $('#compactada-fecha-cuota').html(fechaCuota);
+      $('#compactada-cantidad-cuota').html(ultimaCuota.cuo_valor_pago);
+      console.log(ultimaCuota);
+    }
+  });
+}
+
+function getPrestamosRecientes(){
+  let limite = 5; 
+  let estatus = 2;
+
+  let ruta = 'ajax/PrestamoAjax.php';
+
+  let prestamoJson = {
+    type: 'getRecientes',
+    limite: limite,
+    estatus: estatus
+  };
+
+  let getPrestamosRecientes = new Ajax(ruta,'GET', prestamoJson);
+  getPrestamosRecientes.__ajax()
+  .done(function(response){
+    response = JSON.parse(response);
+    
+    if(response.result){
+      // console.log(response);
+      let prestamos = response.prestamos; 
+      let boton = '';
+
+      for(i in prestamos){
+        boton += `<button class="btn btn-outline-primary w-100 mb-1">ID-${prestamos[i].id}</button>`;
+      }
+
+      $('#btn-prestamos-recientes').html(boton);
     }
   });
 }
@@ -936,7 +1075,7 @@ function visualizarPrestamo(id){
   listar.__ajax()
   .done(function (response){
     response = JSON.parse(response);
-    // console.log(response);
+   
     if(response.result){
       console.log(response);
       $('#editar-observacion-prestamo').val(response.prestamo.pres_observacion);

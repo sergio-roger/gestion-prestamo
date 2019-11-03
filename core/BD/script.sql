@@ -170,3 +170,13 @@ DEFINER
 SELECT *,
 (SElECT montos.mon_cantidad FROM montos where montos.id = prestamos.mon_id) as monto
 FROM prestamos where (est_id = 1 OR est_id = 2) and pres_visible = 'V' and prestamos.cli_id = id_cliente
+
+#Obtener préstamos limitados a n registros
+CREATE PROCEDURE `sp_gePrestamosLimit`(IN `limite` INT, IN `estatus_param` INT) NOT DETERMINISTIC NO SQL SQL SECURITY DEFINER SELECT * , 
+(SELECT CONCAT(clientes.cli_nombres,' ', clientes.cli_apellidos) FROM clientes where prestamos.cli_id = clientes.id) as nombres, 
+(SELECT montos.mon_cantidad from montos where montos.id = prestamos.mon_id) AS monto, 
+(SELECT intereses.int_porcentaje from intereses where intereses.id = prestamos.int_id) AS interes, 
+(SELECT plazos.pla_duracion from plazos where plazos.id = prestamos.pla_id) AS plazoDuracion, 
+(SELECT plazos.pla_periodo FROM plazos where plazos.id = prestamos.pla_id) AS plazoPeriodo, 
+(SELECT CONCAT(usuarios.usu_nombres,' ', usuarios.usu_apellidos) FROM usuarios where usuarios.id = prestamos.usu_id) AS usuarios 
+FROM prestamos WHERE pres_visible = 'V' and estado = 'A' AND prestamos.est_id = estatus_param ORDER BY 1 DESC LIMIT limite

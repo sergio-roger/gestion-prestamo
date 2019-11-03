@@ -31,14 +31,157 @@
                 </ul>
                 <div class="tab-content" id="custom-content-below-tabContent">
                     <div class="tab-pane fade show active" id="custom-content-below-home" role="tabpanel" aria-labelledby="custom-content-below-home-tab">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin malesuada lacus ullamcorper dui molestie, sit amet congue quam finibus. Etiam ultricies nunc non magna feugiat commodo. Etiam odio magna, mollis auctor felis vitae, ullamcorper ornare ligula. Proin pellentesque tincidunt nisi, vitae ullamcorper felis aliquam id. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin id orci eu lectus blandit suscipit. Phasellus porta, ante et varius ornare, sem enim sollicitudin eros, at commodo leo est vitae lacus. Etiam ut porta sem. Proin porttitor porta nisl, id tempor risus rhoncus quis. In in quam a nibh cursus pulvinar non consequat neque. Mauris lacus elit, condimentum ac condimentum at, semper vitae lectus. Cras lacinia erat eget sapien porta consectetur. 
+                        <div>
+                            <div class="row mt-3">
+                                <div class="col-12 col-md-4">
+                                    <div class="card card-dark">
+                                        <div class="card-header">
+                                            <h3 class="card-title">
+                                                Préstamos
+                                            </h3>
+                                        </div>
+                                        
+                                        <div class="card-body">
+                                            <select name="" class="form-control llenaComboPrestamoID" id="cmb-listar-prestamos-cuotas-1">
+                                                <option value="0">Seleccione préstamo</option>
+                                            </select>
+                                            
+                                            <div class="mt-3">
+                                                <h4 class="text-danger">Agregados Recientemente</h4>
+                                                <hr>
+                                                <div class="mt-3" id="btn-prestamos-recientes">
+                                                    <!-- <button class="btn btn-outline-primary w-100 mb-1">ID-20</button> -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                                <div class="col-12 col-md-4">
+                                    <div class="card card-info">
+                                        <div class="card-header">
+                                            <h3 class="card-title">
+                                            Información Cuota
+                                            </h3>
+                                        </div>
+    
+                                        <div class="card-body">
+                                            <div class="row">
+                                               <div class="col-12 d-flex justify-content-between">
+                                                   <div><b>Ciente:</b></div>
+                                                   <div>
+                                                       <span id="compactada-cliente"></san>
+                                                   </div>
+                                               </div>
+                                               <div class="col-12 d-flex justify-content-between">
+                                                   <div><b>Monto prestamo:</b></div>
+                                                   <div id="compactada-monto"></div>
+                                               </div>
+                                               
+                                            </div>          
+                                            <hr style="margin-bottom: 6px;margin-top: 10px;">
+    
+                                            <div>
+                                                <h5 class="text-info"> Cuotas</h5>
+                                                <div class="row scroll-y pl-2 ml-1" id="box-cuotasCompactadas">
+                                                    <!-- <div class="col-2 d-flex flex-column justify-content-center mb-1 pb-2">
+                                                        <span class="ml-1">1</span>
+                                                        <i class="fas fa-check-square fa-lg"></i>
+                                                    </div>                             -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-footer">
+                                            <div class="col-12 d-flex justify-content-between">
+                                                <div><b>N° cuotas </b></div>
+                                                <div id="compactada-cantidad-cuotas"></div>
+                                            </div>
+                                            <div class="col-12 d-flex justify-content-between">
+                                                <div><b>Última cuota: </b></div>
+                                                <div id="compactada-fecha-cuota"></div>
+                                            </div>
+                                            <div class="col-12 d-flex justify-content-between">
+                                                <div><b>Cantidad: $</b></div>
+                                                <div id="compactada-cantidad-cuota"></div>
+                                            </div>
+                                            <div class="col-12 d-flex justify-content-between">
+                                                <div><b>Saldo restante: $</b></div>
+                                                <div id="compactada-restante"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-4">
+                                    <div class="card card-warning">
+                                        <div class="card-header">
+                                            <h3 class="card-title">
+                                                Detalle de Cuota
+                                            </h3>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between">
+                                                <div><b>ID Cuota</b></div>
+                                                <div>8</div>
+                                            </div>
+                                            <div class="d-flex justify-content-between">
+                                                <div><b>N° Cuota: </b></div>
+                                                <div>14</div>
+                                            </div>
+                                            <div class="d-flex justify-content-between">
+                                                <div><b>Cuota diaria: $</b></div>
+                                                <div>2</div>
+                                            </div>
+                                            <div class="d-flex justify-content-between">
+                                                <div><b>Valor Pagado: $</b></div>
+                                                <div>4</div>
+                                            </div>
+
+                                            <div class="d-flex justify-content-between">
+                                                <div><b>Saldo anterior: $</b></div>
+                                                <div>60</div>
+                                            </div>
+                                            <div class="d-flex justify-content-between">
+                                                <div><b>Saldo restante: $</b></div>
+                                                <div>58</div>
+                                            </div>
+
+                                            <div class="d-flex justify-content-between">
+                                                <div><b>Estatus: </b></div>
+                                                <div>Finalizado</div>
+                                            </div>
+
+                                            <hr>
+                                            <h5 class="text-danger">Información Adicional</h5>
+                                            <div class="d-flex justify-content-between">
+                                                <div><b>Hora registro: </b></div>
+                                                <div>20:40</div>
+                                            </div>
+                                            <div class="d-flex justify-content-between">
+                                                <div><b>Fecha registro: </b></div>
+                                                <div>20/10/2019</div>
+                                            </div>
+                                            <div class="d-flex justify-content-between">
+                                                <div><b>Actualizado: </b></div>
+                                                <div>20/10/2019</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="tab-pane fade" id="custom-content-below-profile" role="tabpanel" aria-labelledby="custom-content-below-profile-tab">
                         <div class="card card-dark mt-3">
-                            <div class="card-header">
-                                <h3 class="card-title">
+                            <div class="card-header d-flex justify-content-between">
+                                <h3 class="card-title pt-2">
                                     Información Inicial
                                 </h3>
+                                <div class="w-80 d-flex justify-content-end">
+                                    <button class="btn btn-danger ml-2" id="limpiar-cuota-detallada">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </div>
                             </div>
                             <div class="card-body">
                                 <div class="row">

@@ -151,4 +151,8 @@ class PrestamoController{
         if($respuesta)  return true;
         else            return false;
     }
+
+    public function getRecientes($limite, $estatus){
+        return $this->prestamoModel->getRecientes($limite, $estatus);
+    }
 }

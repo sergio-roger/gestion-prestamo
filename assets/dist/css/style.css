@@ -43,6 +43,17 @@
   transform: scale(1.05);
 }
 
+.scroll-y{
+  max-height: 104px;
+  max-width: 279px;
+  border: 1px solid #ddd;
+  overflow-y: scroll;
+}
+
+.w-80{
+  width: 80% !important;
+}
+
 @media (max-width:575px){
     .margin-a{
       margin-top:15px;

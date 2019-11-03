@@ -142,5 +142,17 @@ class PrestamoModel extends Model{
         return $stmt;
     }
 
+    public function getRecientes($limite, $estatus){
+        $sql = " CALL `sp_gePrestamosLimit`($limite, $estatus);";
+        $stmt = Model::ejecutarSQL($sql);
+
+        if($stmt->rowCount() >= 1){
+            while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+                $lista[] = $row;
+            }
+        }
+
+        return $lista;
+    }
     
 }
