@@ -17,14 +17,14 @@ class FileName{
     private function listaBlanca(){
         $this->listaBlanca = [
             'clienteListar','clienteNuevo','cuotaNueva','prestamoNuevo','home','usuarioPerfil','prestamoListar',
-            'clienteInformacion','clientePrueba','prestamoOcultos', 'prestamoInformacion','cuotaListar'
+            'clienteInformacion','clientePrueba','prestamoOcultos', 'prestamoInformacion','cuotaListar','negocioAjustes'
         ];
     }
     
     //Agregar mas carpetas
     private function listaCarpetas(){
         $this->carpetas = [
-            'cliente','cuota','prestamo','perfil'
+            'cliente','cuota','prestamo','perfil','negocio'
         ];
     }
 

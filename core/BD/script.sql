@@ -117,6 +117,7 @@ CREATE TABLE IF NOT EXISTS cuotas(
     cuo_fecha_registro date null,
     cuo_hora_registro time null,
     cuo_fecha_update timestamp null,
+    cuo_observacion text null,
     estado char null,
     CONSTRAINT FOREIGN KEY (pres_id) REFERENCES prestamos(id),
     CONSTRAINT FOREIGN KEY (cli_id) REFERENCES clientes(id),
@@ -180,3 +181,67 @@ CREATE PROCEDURE `sp_gePrestamosLimit`(IN `limite` INT, IN `estatus_param` INT) 
 (SELECT plazos.pla_periodo FROM plazos where plazos.id = prestamos.pla_id) AS plazoPeriodo, 
 (SELECT CONCAT(usuarios.usu_nombres,' ', usuarios.usu_apellidos) FROM usuarios where usuarios.id = prestamos.usu_id) AS usuarios 
 FROM prestamos WHERE pres_visible = 'V' and estado = 'A' AND prestamos.est_id = estatus_param ORDER BY 1 DESC LIMIT limite
+
+#Para obtener una determinada cuota
+CREATE PROCEDURE `sp_getCuota`(IN `id_cuota` INT) 
+NOT DETERMINISTIC NO SQL
+SQL SECURITY 
+DEFINER 
+SELECT * , 
+(SELECT estatus.est_detalle from estatus where estatus.id = cuotas.est_id) as estatus_des 
+from cuotas where estado = 'A' and id = id_cuota
+
+#Verificar si existe un cliente con un prestamo activo inicial o pagando
+CREATE PROCEDURE `sp_existeClientePrestamo`(IN `id_cliente` INT) 
+NOT DETERMINISTIC 
+NO SQL 
+SQL SECURITY 
+DEFINER 
+SELECT * from prestamos where estado = 'A' and (est_id = 1 OR est_id = 2) and cli_id = id_cliente
+
+#Segunda Parte 
+#Seguridad, validación, control de transacciones, movimientos
+
+CREATE TABLE IF NOT EXISTS patrimonios(
+    id int AUTO_INCREMENT not null PRIMARY KEY,
+    usu_id int null,
+    pat_valor decimal(8,2) null,
+    pat_fecha_registro date null,
+    estado char null,
+    CONSTRAINT FOREIGN KEY (usu_id) REFERENCES usuarios(id)
+)ENGINE=INNODB
+
+CREATE TABLE IF NOT EXISTS motivos(
+    id int AUTO_INCREMENT not null PRIMARY KEY,
+    usu_id int null,
+    mot_detalle text null,
+    mot_fecha_registro date null,
+    estado char null,
+    CONSTRAINT FOREIGN KEY (usu_id) REFERENCES usuarios(id)
+)ENGINE=INNODB
+
+CREATE TABLE IF NOT EXISTS tiposMovimientos(
+    id int AUTO_INCREMENT not null PRIMARY KEY,
+    usu_id int null,
+    tm_numeracion int null,
+    tm_cuenta varchar(255) null,
+    tm_operacion char null,
+    tm_fecha_registro date null,
+    estado char null,
+    CONSTRAINT FOREIGN KEY (usu_id) REFERENCES usuarios(id)
+)ENGINE=INNODB
+
+CREATE TABLE IF NOT EXISTS movimientos(
+    id int AUTO_INCREMENT not null PRIMARY KEY,
+    usu_id int null,
+   	tm_id int null,
+    mot_id int null,
+    mov_valor decimal(8,2) null,
+    mov_fecha_registro date null,
+    estado char null,
+    CONSTRAINT FOREIGN KEY (usu_id) REFERENCES usuarios(id),
+    CONSTRAINT FOREIGN KEY (tm_id) REFERENCES tiposmovimientos(id),
+    CONSTRAINT FOREIGN KEY (mot_id) REFERENCES motivos(id)
+)ENGINE=INNODB
+
+

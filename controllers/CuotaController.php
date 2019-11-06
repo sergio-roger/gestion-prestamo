@@ -45,7 +45,8 @@ class CuotaController{
         $data = json_decode($_POST['data']);
         $cuota = $data->{'cuota'};
         $cuota = (array)$cuota;
-        
+        $cuota['cuo_observacion'] = ucfirst($cuota['cuo_observacion']);
+
         return $this->cuotaModel->insert($cuota);
     }
 
@@ -56,5 +57,9 @@ class CuotaController{
     
     public function getCuotasByPrestamo($idPrestamo){
         return $this->cuotaModel->getCuotasByPrestamo($idPrestamo);
+     }
+
+     public function getCuota($id){
+         return $this->cuotaModel->getCuota($id);
      }
 }

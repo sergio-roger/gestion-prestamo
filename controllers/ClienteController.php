@@ -47,10 +47,22 @@ class ClienteController {
     }
 
     public function insert($datos){
+        // Convertir la primera letra a mayúscula
+        $datos['cli_nombres'] = ucfirst($datos['cli_nombres']);
+        $datos['cli_apellidos'] = ucfirst($datos['cli_apellidos']);
+        $datos['cli_lugar_trabajo'] = ucfirst($datos['cli_lugar_trabajo']);
+        $datos['cli_lugar_cobro'] = ucfirst($datos['cli_lugar_cobro']);
+
         return $this->clienteModel->insert($datos);
     }
 
     public function update($id, $datos){
+        // Convertir la primera letra a mayúscula
+        $datos['cli_nombres'] = ucfirst($datos['cli_nombres']);
+        $datos['cli_apellidos'] = ucfirst($datos['cli_apellidos']);
+        $datos['cli_lugar_trabajo'] = ucfirst($datos['cli_lugar_trabajo']);
+        $datos['cli_lugar_cobro'] = ucfirst($datos['cli_lugar_cobro']);
+
         $res =  $this->clienteModel->update($id, $datos);
 
         if($res) return true;
@@ -66,10 +78,8 @@ class ClienteController {
     public function delete($id){
         $respuesta = $this->clienteModel->delete($id); 
         
-        if($respuesta)
-            return true;
-        else
-            return false;
+        if($respuesta)  return true;
+        else            return false;
     }
 
     public function all(){

@@ -20,14 +20,11 @@
                         <a class="nav-link" id="custom-content-below-profile-tab" data-toggle="pill" 
                         href="#custom-content-below-profile" role="tab" aria-controls="custom-content-below-profile" aria-selected="false">Detallada</a>
                     </li>
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <a class="nav-link" id="custom-content-below-messages-tab" data-toggle="pill" 
                         href="#custom-content-below-messages" role="tab" aria-controls="custom-content-below-messages" aria-selected="false">Messages</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="custom-content-below-settings-tab" data-toggle="pill" 
-                        href="#custom-content-below-settings" role="tab" aria-controls="custom-content-below-settings" aria-selected="false">Settings</a>
-                    </li>
+                    </li> -->
+           
                 </ul>
                 <div class="tab-content" id="custom-content-below-tabContent">
                     <div class="tab-pane fade show active" id="custom-content-below-home" role="tabpanel" aria-labelledby="custom-content-below-home-tab">
@@ -59,10 +56,13 @@
                             
                                 <div class="col-12 col-md-4">
                                     <div class="card card-info">
-                                        <div class="card-header">
-                                            <h3 class="card-title">
-                                            Información Cuota
-                                            </h3>
+                                        <div class="card-header d-flex justify-content-between">
+                                            <h3 class="card-title mt-2">Información Cuota</h3>
+                                            <div class="w-50 d-flex justify-content-end">
+                                                <button class="btn btn-danger ml-2" id="limpiar-cuota-compactada">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                            </div>
                                         </div>
     
                                         <div class="card-body">
@@ -115,56 +115,64 @@
                                 <div class="col-12 col-md-4">
                                     <div class="card card-warning">
                                         <div class="card-header">
-                                            <h3 class="card-title">
-                                                Detalle de Cuota
-                                            </h3>
+                                            <h3 class="card-title mt-2">Detalle de Cuota </h3>
+                                            <div class="w-55 d-flex justify-content-end">
+                                                <button class="btn btn-danger" id="limpiar-detalle-cuota-compactada">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                            </div>
                                         </div>
                                         <div class="card-body">
                                             <div class="d-flex justify-content-between">
                                                 <div><b>ID Cuota</b></div>
-                                                <div>8</div>
+                                                <div id="dc-id"></div>
                                             </div>
                                             <div class="d-flex justify-content-between">
                                                 <div><b>N° Cuota: </b></div>
-                                                <div>14</div>
+                                                <div id="cd-numero-cuota"></div>
                                             </div>
-                                            <div class="d-flex justify-content-between">
+                                            <!-- <div class="d-flex justify-content-between">
                                                 <div><b>Cuota diaria: $</b></div>
                                                 <div>2</div>
-                                            </div>
+                                            </div> -->
                                             <div class="d-flex justify-content-between">
                                                 <div><b>Valor Pagado: $</b></div>
-                                                <div>4</div>
+                                                <div id="cd-valor-pago"></div>
                                             </div>
 
                                             <div class="d-flex justify-content-between">
                                                 <div><b>Saldo anterior: $</b></div>
-                                                <div>60</div>
+                                                <div id="cd-saldo-anterior"></div>
                                             </div>
                                             <div class="d-flex justify-content-between">
                                                 <div><b>Saldo restante: $</b></div>
-                                                <div>58</div>
+                                                <div id="cd-saldo-restante"></div>
                                             </div>
 
                                             <div class="d-flex justify-content-between">
                                                 <div><b>Estatus: </b></div>
-                                                <div>Finalizado</div>
+                                                <div id="cd-estatus"></div>
+                                            </div>
+
+                                            <div class="d-flex flex-column justify-content-between">
+                                                <div><b>Observacion: </b></div>
+                                                <div id="cd-observacion"></div>
                                             </div>
 
                                             <hr>
                                             <h5 class="text-danger">Información Adicional</h5>
                                             <div class="d-flex justify-content-between">
                                                 <div><b>Hora registro: </b></div>
-                                                <div>20:40</div>
+                                                <div id="cd-hora-registro"></div>
                                             </div>
                                             <div class="d-flex justify-content-between">
                                                 <div><b>Fecha registro: </b></div>
-                                                <div>20/10/2019</div>
+                                                <div id="cd-fecha-registro"></div>
                                             </div>
-                                            <div class="d-flex justify-content-between">
+                                            <!-- <div class="d-flex justify-content-between">
                                                 <div><b>Actualizado: </b></div>
-                                                <div>20/10/2019</div>
-                                            </div>
+                                                <div id="cd-actualizado"></div>
+                                            </div> -->
                                         </div>
                                     </div>
                                 </div>
@@ -297,12 +305,10 @@
                         </div>
                     </div>
 
-                    <div class="tab-pane fade" id="custom-content-below-messages" role="tabpanel" aria-labelledby="custom-content-below-messages-tab">
+                    <!-- <div class="tab-pane fade" id="custom-content-below-messages" role="tabpanel" aria-labelledby="custom-content-below-messages-tab">
                         Morbi turpis dolor, vulputate vitae felis non, tincidunt congue mauris. Phasellus volutpat augue id mi placerat mollis. Vivamus faucibus eu massa eget condimentum. Fusce nec hendrerit sem, ac tristique nulla. Integer vestibulum orci odio. Cras nec augue ipsum. Suspendisse ut velit condimentum, mattis urna a, malesuada nunc. Curabitur eleifend facilisis velit finibus tristique. Nam vulputate, eros non luctus efficitur, ipsum odio volutpat massa, sit amet sollicitudin est libero sed ipsum. Nulla lacinia, ex vitae gravida fermentum, lectus ipsum gravida arcu, id fermentum metus arcu vel metus. Curabitur eget sem eu risus tincidunt eleifend ac ornare magna. 
-                    </div>
-                    <div class="tab-pane fade" id="custom-content-below-settings" role="tabpanel" aria-labelledby="custom-content-below-settings-tab">
-                        Pellentesque vestibulum commodo nibh nec blandit. Maecenas neque magna, iaculis tempus turpis ac, ornare sodales tellus. Mauris eget blandit dolor. Quisque tincidunt venenatis vulputate. Morbi euismod molestie tristique. Vestibulum consectetur dolor a vestibulum pharetra. Donec interdum placerat urna nec pharetra. Etiam eget dapibus orci, eget aliquet urna. Nunc at consequat diam. Nunc et felis ut nisl commodo dignissim. In hac habitasse platea dictumst. Praesent imperdiet accumsan ex sit amet facilisis. 
-                    </div>
+                    </div> -->
+                 
                 </div>
             </div>
         </div>

@@ -55,6 +55,7 @@ class PrestamoController{
         $prestamo = $this->cleanArray($prestamo);
         
         if(is_array($prestamo)){
+            $prestamo['observacion'] = ucfirst($prestamo['observacion']);
             $result =  $this->prestamoModel->insert($prestamo);
         }else{
             $result = false;
@@ -154,5 +155,9 @@ class PrestamoController{
 
     public function getRecientes($limite, $estatus){
         return $this->prestamoModel->getRecientes($limite, $estatus);
+    }
+
+    public function existeClientePrestamo($idCliente){
+        return $this->prestamoModel->existeClientePrestamo($idCliente);
     }
 }

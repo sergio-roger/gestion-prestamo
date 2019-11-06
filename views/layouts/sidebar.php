@@ -127,23 +127,6 @@
           </li>
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-table"></i>
-              <p>
-                Abonos
-                <i class="fas fa-angle-left right"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="../tables/simple.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Nuevo Abono</p>
-                </a>
-              </li>      
-            </ul>
-          </li>
-          <li class="nav-item has-treeview">
-            <a href="#" class="nav-link">
               <i class="nav-icon fas fa-laptop"></i>
               <p>
                 Sistema
@@ -157,6 +140,23 @@
                   <p>Elementos Generales</p>
                 </a>
               </li>
+            </ul>
+          </li>
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+              <i class="fas fa-balance-scale"></i>
+              <p class="ml-2">
+                Negocio
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="<?= BASE ?>negocioAjustes" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Ajustes</p>
+                </a>
+              </li>      
             </ul>
           </li>
           <li class="nav-header">Seguridad y Ajustes</li>

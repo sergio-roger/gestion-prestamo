@@ -13,7 +13,6 @@ $helper = new Helper();
 $prestamoController = new PrestamoController();
 $cuotaController = new CuotaController();
 
-
 switch($method){
     case 'POST':
         if(isset($_POST['data'])){    
@@ -51,7 +50,6 @@ switch($method){
                         $response['prestamoTerminado'] = true;
                         $prestamoController->updateEstatus($cuota['pres_id'], 3);
                     }
-
                     // var_dump($prestamo);
                     break;
            
@@ -66,12 +64,18 @@ switch($method){
         if(isset($_GET['data'])){
             $data = json_decode($_GET['data']);
             $tipo = $data->{'type'};
-            $idPrestamo = $data->{'idPrestamo'};
             
             switch($tipo){
                 case 'getCuotasPrestamo':
+                    $idPrestamo = $data->{'idPrestamo'};
                     $response['cuotas'] = $cuotaController->getCuotasByPrestamo($idPrestamo);
                     $response['result'] = true;
+                    break;
+                
+                case 'one':
+                    $id = $data->{'id'};
+                    $response['result'] = true;
+                    $response['cuota'] = $cuotaController->getCuota($id);
                     break;
             }
         }

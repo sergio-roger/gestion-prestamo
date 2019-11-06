@@ -19,8 +19,8 @@ class CuotaModel extends Model{
             $cuota['cuo_fecha_registro'] = date('Y-m-d');
             
             $sql = "
-                INSERT INTO `cuotas`(`pres_id`, `cli_id`, `usu_id`, `est_id`, `cuo_cuota_numero`, `cuo_fecha_pago`, `cuo_valor_pago`, `cuo_saldo_inicial`, `cuo_saldo_actual`, `cuo_fecha_registro`, `cuo_hora_registro`, `estado`) 
-                VALUES (:pres_id, :cli_id, :usu_id, :est_id, :cuo_cuota_numero, :cuo_fecha_pago, :cuo_valor_pago, :cuo_saldo_inicial, :cuo_saldo_actual, :cuo_fecha_registro, :cuo_hora_registro, :estado)";
+                INSERT INTO `cuotas`(`pres_id`, `cli_id`, `usu_id`, `est_id`, `cuo_cuota_numero`, `cuo_fecha_pago`, `cuo_valor_pago`, `cuo_saldo_inicial`, `cuo_saldo_actual`, `cuo_fecha_registro`, `cuo_hora_registro`, `estado`, `cuo_observacion`) 
+                VALUES (:pres_id, :cli_id, :usu_id, :est_id, :cuo_cuota_numero, :cuo_fecha_pago, :cuo_valor_pago, :cuo_saldo_inicial, :cuo_saldo_actual, :cuo_fecha_registro, :cuo_hora_registro, :estado, :cuo_observacion)";
 
             $stmt = Model::Conectar()->prepare($sql);
             // $stmt->bindParam(':id_usuario', $prestamo['id_usuario']);
@@ -67,4 +67,20 @@ class CuotaModel extends Model{
 
         return $list;
     }
+
+    public function getCuota($id){
+        $sql = "CALL sp_getCuota ($id)";
+        $stmt = Model::ejecutarSQL($sql);
+        $cuota = 'false'; 
+
+        if($stmt->rowCount() > 0)
+            $cuota = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+        return $cuota;
+    }
+
+    public function cleanString($string){
+        return Model::cleanString($string);
+    }
+
 }

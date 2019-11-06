@@ -142,6 +142,21 @@
                 </div>
             </div>    
         </div>
+
+        <label class="text-info mt-4">Información Adicional</label>
+        <hr class="mt-0">
+        <div class="row">              
+          <div class="col-12">
+              <div class="form-group">
+                <label for="deuda-inicial">Observación</label>
+                <div class="">
+                  <!-- <input type="number" class="form-control" name="txt-cuota-observacion" 
+                  disabled id="txt-cuota-observacion" value="0"> -->
+                  <textarea rows="2" id="txt-cuota-observacion" class="form-control"> </textarea>
+                </div>
+                </div>
+            </div> 
+        </div>
       </div>
       <!-- /.card-body -->
 

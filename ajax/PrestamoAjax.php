@@ -89,6 +89,11 @@ elseif($method == 'GET'){
             $prestamos = $prestamoController->getRecientes($limite, $estatus);
             $response['prestamos'] = $prestamos;
         }
+        elseif($data->{'type'} == 'existeCliente'){
+            $idCliente = $data->{'idCliente'};
+            $response['idCliente'] = $idCliente;
+            $response['existe'] = $prestamoController->existeClientePrestamo($idCliente);
+        }
     }
 }
 elseif($method == 'PUT'){

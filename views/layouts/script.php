@@ -21,7 +21,8 @@
 <script src="<?= BASE?>assets/dist/js/demo.js"></script>
 <!-- Script para el preloader animated circles -->
 <script src="<?= BASE?>assets/plugins/Animated-Circles/js/g-spinner.min.js"></script>
-
+<!-- Plugins jquery -->
+<script src="<?= BASE?>assets/plugins/inputmask/jquery.inputmask.bundle.js"></script>
 <!-- Js personalizado -->
 <script src="<?= BASE?>assets/dist/js/peticionesAjax.js"></script>
 <script src="<?= BASE?>assets/dist/js/app.js"></script>

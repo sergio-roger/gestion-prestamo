@@ -44,14 +44,37 @@
 }
 
 .scroll-y{
-  max-height: 104px;
+  max-height: 114px;
   max-width: 279px;
   border: 1px solid #ddd;
   overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 .w-80{
   width: 80% !important;
+}
+
+.w-50{
+  width: 50% !important;
+}
+
+.w-55{
+  width: 55% !important;
+}
+
+.boxCuotaCompactada{
+  cursor: pointer;
+}
+
+.p-05{
+  padding-bottom: 0.5rem;
+  padding-top: 0.5rem;
+}
+
+.boxCuotaCompactada:hover{
+  color: #17a2b8;
+  transform: scale(1.05);
 }
 
 @media (max-width:575px){

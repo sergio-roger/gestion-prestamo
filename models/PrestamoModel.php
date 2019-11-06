@@ -151,8 +151,15 @@ class PrestamoModel extends Model{
                 $lista[] = $row;
             }
         }
-
         return $lista;
+    }
+    
+    public function existeClientePrestamo($idCliente){
+        $sql = "CALL sp_existeClientePrestamo($idCliente)";
+        $stmt = Model::ejecutarSQL($sql);
+
+        if($stmt->rowCount() >= 1)  return true;
+        else                        return false;
     }
     
 }
